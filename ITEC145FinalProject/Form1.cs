@@ -2,7 +2,16 @@ namespace ITEC145FinalProject
 {
     public partial class Form1 : Form
     {
+        //Random rnd = new Random();
         List<Ball> balls = new List<Ball>();
+        List<Paddle> paddles = new List<Paddle>();
+        //Player paddle = new Player();
+        Ball ball = new Ball(100, 100);
+        Ball ball2 = new Ball(250, 10);
+        Paddle paddle = new Paddle(225, 550);
+
+        enum KPress { none = 0, right = 1, left = 2 };
+        KPress kPaddle = KPress.none;
 
         public Form1()
         {
@@ -14,45 +23,75 @@ namespace ITEC145FinalProject
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.UserPaint, true);
 
-            Ball ball = new Ball(100, 100);
+
             balls.Add(ball);
+            balls.Add(ball2);
+            paddles.Add(paddle);
+            //Controls.Add(paddle.picPlayer);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             foreach (Ball ball in balls)
                 ball.Draw(e.Graphics);
-
-            for (int i = 0; i < balls.Count - 1; i++)
+            foreach (Paddle paddle in paddles)
+                paddle.Draw(e.Graphics);
+            foreach (Ball ball in balls)
             {
-                for (int j = i + 1; j < balls.Count; j++)
+                if (CollisionTest(ball, paddle))
                 {
-                    if (BallCollisionTest(balls[i], balls[j]))
-                    {
-                        balls[i].ChangeDirection();
-                        balls[j].ChangeDirection();
-                    }
+                    ball.ChangeDirection();
                 }
             }
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             this.Invalidate(false);   // this will force the Paint event to fire
+
+            if ((kPaddle & KPress.left) == KPress.left) paddle.MoveLeft();
+            if ((kPaddle & KPress.right) == KPress.right) paddle.MoveRight();
         }
 
-        private bool BallCollisionTest(Ball ball1, Ball ball2)
+        private bool CollisionTest(Ball tmpBall, Paddle tmpPaddle)
         {
-            if (ball1.X + ball1.Width < ball2.X)
+            if (tmpBall.X + tmpBall.Width < tmpPaddle.X)
                 return false;
-            if (ball2.X + ball2.Width < ball1.X)
+            if (tmpPaddle.X + tmpPaddle.Width < tmpBall.X)
                 return false;
-            if (ball1.Y + ball1.Height < ball2.Y)
+            if (tmpBall.Y + tmpBall.Height < tmpPaddle.Y)
                 return false;
-            if (ball2.Y + ball2.Height < ball1.Y)
+            if (tmpPaddle.Y + tmpPaddle.Height < tmpBall.Y)
                 return false;
 
             return true;
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyData)
+            {
+                case Keys.Left:
+                    kPaddle |= KPress.left;
+                    break;
+                case Keys.Right:
+                    kPaddle |= KPress.right;
+                    break;
+            }
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyData)
+            {
+                case Keys.Left:
+                    kPaddle &= ~KPress.left;
+                    break;
+                case Keys.Right:
+                    kPaddle &= ~KPress.right;
+                    break;
+            }
         }
     }
 }

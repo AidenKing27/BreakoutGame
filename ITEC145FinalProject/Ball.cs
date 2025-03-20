@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ITEC145FinalProject
 {
-    internal class Ball
+    public class Ball
     {
         static public Form1 mainForm;
 
@@ -28,10 +28,10 @@ namespace ITEC145FinalProject
 
         public Ball(int x, int y)
         {
-            _xSpeed = 20;
-            _ySpeed = 20;
-            _width = 50;
-            _height = 50;
+            _xSpeed = 12;
+            _ySpeed = 12;
+            _width = 30;
+            _height = 30;
             _x = x;
             _y = y;
             _brush = new SolidBrush(_color);
@@ -40,7 +40,7 @@ namespace ITEC145FinalProject
 
         public void ChangeDirection()
         {
-            _xSpeed *= -1;
+            //_xSpeed *= -1;
             _ySpeed *= -1;
         }
 
