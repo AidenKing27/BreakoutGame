@@ -1,17 +1,32 @@
+using System.Xml.XPath;
+
 namespace ITEC145FinalProject
 {
     public partial class Form1 : Form
     {
-        //Random rnd = new Random();
+        //lists of objects
         List<Ball> balls = new List<Ball>();
         List<Paddle> paddles = new List<Paddle>();
-        //Player paddle = new Player();
-        Ball ball = new Ball(100, 100);
-        Ball ball2 = new Ball(250, 10);
-        Paddle paddle = new Paddle(225, 550);
+        List<Block> blocks = new List<Block>();
 
+        //object instances
+        Ball ball = new Ball(100, 100);
+        Paddle paddle = new Paddle(225, 550);
+        Block block = new Block(225, 100);
+
+        //enum for paddle movement
         enum KPress { none = 0, right = 1, left = 2 };
         KPress kPaddle = KPress.none;
+
+        //enum for side
+        public enum CollisionSide
+        {
+            None,
+            Top,
+            Bottom,
+            Left,
+            Right
+        }
 
         public Form1()
         {
@@ -23,38 +38,44 @@ namespace ITEC145FinalProject
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.UserPaint, true);
 
-
+            //add objects to lists
             balls.Add(ball);
-            balls.Add(ball2);
             paddles.Add(paddle);
-            //Controls.Add(paddle.picPlayer);
+            blocks.Add(block);
         }
+
+
+
+
+
+
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            //draw the ball, paddle, and block(s)
             foreach (Ball ball in balls)
                 ball.Draw(e.Graphics);
             foreach (Paddle paddle in paddles)
                 paddle.Draw(e.Graphics);
+            foreach (Block block in blocks)
+                block.Draw(e.Graphics);
+
+            //collision detection
             foreach (Ball ball in balls)
             {
-                if (CollisionTest(ball, paddle))
-                {
-                    ball.ChangeDirection();
-                }
-            }
-            
+                label1.Text = $"X: {ball.XPositive}";
+                label2.Text = $"Y: {ball.YPositive}";
+
+                BlockCollisionTest(ball);
+
+                //if (PaddleCollision(ball, paddle))
+                //{
+                //    ball.ChangeDirectionY();
+                //}
+            }   
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            this.Invalidate(false);   // this will force the Paint event to fire
-
-            if ((kPaddle & KPress.left) == KPress.left) paddle.MoveLeft();
-            if ((kPaddle & KPress.right) == KPress.right) paddle.MoveRight();
-        }
-
-        private bool CollisionTest(Ball tmpBall, Paddle tmpPaddle)
+        private bool PaddleCollision(Ball tmpBall, Paddle tmpPaddle)
         {
             if (tmpBall.X + tmpBall.Width < tmpPaddle.X)
                 return false;
@@ -65,7 +86,85 @@ namespace ITEC145FinalProject
             if (tmpPaddle.Y + tmpPaddle.Height < tmpBall.Y)
                 return false;
 
-            return true;
+            return true; //if true, there HAS been a collision
+        }
+
+        private void BlockCollisionTest(Ball b)
+        {
+            CollisionSide ppp = GetCollisionSide(ball, block);
+            switch (ppp)
+            {
+                case CollisionSide.Left:
+                    label3.Text = "Collision on the Left";
+                    b.ChangeDirectionX();
+                    break;
+
+                case CollisionSide.Right:
+                    label3.Text = "Collision on the Right";
+                    b.ChangeDirectionX();
+                    break;
+
+                case CollisionSide.Top:
+                    label3.Text = "Collision on the Top";
+                    b.ChangeDirectionY();
+                    break;
+
+                case CollisionSide.Bottom:
+                    label3.Text = "Collision on the Bottom";
+                    b.ChangeDirectionY();
+                    break;
+
+                case CollisionSide.None:
+                default:
+                    label3.Text = "No collision detected";
+                    break;
+            }
+        }
+
+        public CollisionSide GetCollisionSide(Ball gBall, Block gBlock)
+        {
+            // Calculate the distances from rect1's edges to rect2
+            int deltaLeft = gBlock.Right - gBall.Left;
+            int deltaRight = gBall.Right - gBlock.Left;
+            int deltaTop = gBlock.Bottom - gBall.Top;
+            int deltaBottom = gBall.Bottom - gBlock.Top;
+
+            // Get the smallest penetration depth
+            int minHorizontal = Math.Min(deltaLeft, deltaRight);
+            int minVertical = Math.Min(deltaTop, deltaBottom);
+
+            // Determine if horizontal or vertical collision is stronger
+            if (minHorizontal < minVertical)
+            {
+                return (deltaLeft < deltaRight) ? CollisionSide.Left : CollisionSide.Right;
+            }
+            else
+            {
+                return (deltaTop < deltaBottom) ? CollisionSide.Top : CollisionSide.Bottom;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.Invalidate(false);   // this will force the Paint event to fire
+
+            if ((kPaddle & KPress.left) == KPress.left) paddle.MoveLeft();
+            if ((kPaddle & KPress.right) == KPress.right) paddle.MoveRight();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)

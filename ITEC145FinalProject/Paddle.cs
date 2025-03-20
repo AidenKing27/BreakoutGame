@@ -9,13 +9,10 @@ namespace ITEC145FinalProject
 {
     public class Paddle
     {
-        static public Form1 mainForm;
-
         private int _x;
         private int _y;
         private int _width;
         private int _height;
-        private int _xSpeed;
         private Color _color = Color.Red;
         private Brush _brush;
 
@@ -28,7 +25,6 @@ namespace ITEC145FinalProject
         {
             _width = 130;
             _height = 10;
-            _xSpeed = 0;
             _x = x;
             _y = y;
             _brush = new SolidBrush(_color);
@@ -36,11 +32,11 @@ namespace ITEC145FinalProject
 
         public void MoveLeft()
         {
-            _x -= 5;
+            _x -= 8;
         }
         public void MoveRight()
         {
-            _x += 5;
+            _x += 8;
         }
 
         public void Draw(Graphics gr)
