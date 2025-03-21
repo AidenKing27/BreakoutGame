@@ -50,8 +50,8 @@ namespace ITEC145FinalProject
 
         public Ball(int x, int y)
         {
-            _xSpeed = 12;
-            _ySpeed = 12;
+            _xSpeed = 10;
+            _ySpeed = 10;
             _width = 30;
             _height = 30;
             _x = x;
@@ -75,40 +75,24 @@ namespace ITEC145FinalProject
             _y += _ySpeed;
 
             //original
-            if (_x + _width > mainForm.ClientSize.Width)
-            {
-                _xSpeed *= -1;
-            }
-            if (_x <= 0)
-            {
-                _xSpeed *= -1;
-            }
-            if (_y + _height >  mainForm.ClientSize.Height)
-            {
-                _y = 10;
-            }
-            if (_y <= 0)
-            {
-                _ySpeed *= -1;
-            }
+            //if (_x + _width > mainForm.ClientSize.Width)
+            //    _xSpeed *= -1;
+            //if (_x <= 0)
+            //    _xSpeed *= -1;
+            //if (_y + _height > mainForm.ClientSize.Height)
+            //    _y = 10;
+            //if (_y <= 0)
+            //    _ySpeed *= -1;
 
             //test
-            if (_x + _width > mainForm.picGameArea.Width)
-            {
+            if (_x + _width > mainForm.picGameArea.Width + 25)
                 _xSpeed *= -1;
-            }
             if (_x <= mainForm.picGameArea.Left)
-            {
                 _xSpeed *= -1;
-            }
-            if (_y + _height > mainForm.picGameArea.Height)
-            {
-                _y = mainForm.picGameArea.Top + 10;
-            }
+            if (_y + _height > mainForm.picGameArea.Height + 107)
+                _y = 250;
             if (_y <= mainForm.picGameArea.Top)
-            {
                 _ySpeed *= -1;
-            }
 
             gr.FillEllipse(_brush, _x, _y, _width, _height);
         }

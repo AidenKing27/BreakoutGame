@@ -12,7 +12,7 @@ namespace ITEC145FinalProject
 
         //object instances
         Ball ball = new Ball(100, 300);
-        Paddle paddle = new Paddle(225, 500);
+        Paddle paddle = new Paddle(225, 700);
         Block block1 = new Block(40, 120);
         Block block2 = new Block(155, 120);
         Block block3 = new Block(265, 120);
@@ -32,9 +32,10 @@ namespace ITEC145FinalProject
             InitializeComponent();
             Ball.mainForm = this;
 
-            picGameArea.Location = new Point(22, 106);
+            picGameArea.Location = new Point(25, 107);
             picGameArea.BackColor = Color.Transparent;
             picGameArea.Size = new Size(600, 650);
+
 
             //Steve said to add these
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -48,7 +49,6 @@ namespace ITEC145FinalProject
             blocks.Add(block2);
             blocks.Add(block3);
             blocks.Add(block4);
-           // Controls.Add(picGameArea);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
