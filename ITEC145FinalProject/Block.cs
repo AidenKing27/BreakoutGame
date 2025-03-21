@@ -15,11 +15,8 @@ namespace ITEC145FinalProject
         private Color _color = Color.Purple;
         private Brush _brush;
 
-        public int X { get { return _x; } }
-        public int Y { get { return _y; } }
         public int Width { get { return _width; } }
         public int Height { get { return _height; } }
-
 
         public int Left
         {
@@ -43,7 +40,7 @@ namespace ITEC145FinalProject
         public Block(int x, int y)
         {
             _width = 100;
-            _height = 50;
+            _height = 35;
             _x = x;
             _y = y;
             _brush = new SolidBrush(_color);

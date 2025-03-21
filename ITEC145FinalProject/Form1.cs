@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Xml.XPath;
 
 namespace ITEC145FinalProject
@@ -10,28 +11,30 @@ namespace ITEC145FinalProject
         List<Block> blocks = new List<Block>();
 
         //object instances
-        Ball ball = new Ball(100, 100);
-        Paddle paddle = new Paddle(225, 550);
-        Block block = new Block(225, 100);
+        Ball ball = new Ball(100, 300);
+        Paddle paddle = new Paddle(225, 500);
+        Block block1 = new Block(40, 120);
+        Block block2 = new Block(155, 120);
+        Block block3 = new Block(265, 120);
+        Block block4 = new Block(375, 120);
 
         //enum for paddle movement
         enum KPress { none = 0, right = 1, left = 2 };
         KPress kPaddle = KPress.none;
 
-        //enum for side
-        public enum CollisionSide
-        {
-            None,
-            Top,
-            Bottom,
-            Left,
-            Right
-        }
+        public PictureBox picGameArea = new PictureBox();
+        
+
+
 
         public Form1()
         {
             InitializeComponent();
             Ball.mainForm = this;
+
+            picGameArea.Location = new Point(22, 106);
+            picGameArea.BackColor = Color.Transparent;
+            picGameArea.Size = new Size(600, 650);
 
             //Steve said to add these
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -41,14 +44,12 @@ namespace ITEC145FinalProject
             //add objects to lists
             balls.Add(ball);
             paddles.Add(paddle);
-            blocks.Add(block);
+            blocks.Add(block1);
+            blocks.Add(block2);
+            blocks.Add(block3);
+            blocks.Add(block4);
+           // Controls.Add(picGameArea);
         }
-
-
-
-
-
-
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -63,101 +64,83 @@ namespace ITEC145FinalProject
             //collision detection
             foreach (Ball ball in balls)
             {
-                label1.Text = $"X: {ball.XPositive}";
-                label2.Text = $"Y: {ball.YPositive}";
-
-                BlockCollisionTest(ball);
-
-                //if (PaddleCollision(ball, paddle))
-                //{
-                //    ball.ChangeDirectionY();
-                //}
-            }   
-        }
-
-        private bool PaddleCollision(Ball tmpBall, Paddle tmpPaddle)
-        {
-            if (tmpBall.X + tmpBall.Width < tmpPaddle.X)
-                return false;
-            if (tmpPaddle.X + tmpPaddle.Width < tmpBall.X)
-                return false;
-            if (tmpBall.Y + tmpBall.Height < tmpPaddle.Y)
-                return false;
-            if (tmpPaddle.Y + tmpPaddle.Height < tmpBall.Y)
-                return false;
-
-            return true; //if true, there HAS been a collision
-        }
-
-        private void BlockCollisionTest(Ball b)
-        {
-            CollisionSide ppp = GetCollisionSide(ball, block);
-            switch (ppp)
-            {
-                case CollisionSide.Left:
-                    label3.Text = "Collision on the Left";
-                    b.ChangeDirectionX();
-                    break;
-
-                case CollisionSide.Right:
-                    label3.Text = "Collision on the Right";
-                    b.ChangeDirectionX();
-                    break;
-
-                case CollisionSide.Top:
-                    label3.Text = "Collision on the Top";
-                    b.ChangeDirectionY();
-                    break;
-
-                case CollisionSide.Bottom:
-                    label3.Text = "Collision on the Bottom";
-                    b.ChangeDirectionY();
-                    break;
-
-                case CollisionSide.None:
-                default:
-                    label3.Text = "No collision detected";
-                    break;
+                if (TopBottomCollisionPaddle(ball, paddle))
+                {
+                    ball.ChangeDirectionY();
+                }
+                if (LeftRightCollisionPaddle(ball, paddle))
+                {
+                    ball.ChangeDirectionX();
+                }
+                foreach (Block block in blocks)
+                {
+                    if (TopBottomCollisionBlock(ball, block))
+                    {
+                        ball.ChangeDirectionY();
+                    }
+                    if (LeftRightCollisionBlock(ball, block))
+                    {
+                        ball.ChangeDirectionX();
+                    }
+                }
             }
         }
 
-        public CollisionSide GetCollisionSide(Ball gBall, Block gBlock)
+        private bool TopBottomCollisionPaddle(Ball tmpBall, Paddle tmpPaddle)
         {
-            // Calculate the distances from rect1's edges to rect2
-            int deltaLeft = gBlock.Right - gBall.Left;
-            int deltaRight = gBall.Right - gBlock.Left;
-            int deltaTop = gBlock.Bottom - gBall.Top;
-            int deltaBottom = gBall.Bottom - gBlock.Top;
-
-            // Get the smallest penetration depth
-            int minHorizontal = Math.Min(deltaLeft, deltaRight);
-            int minVertical = Math.Min(deltaTop, deltaBottom);
-
-            // Determine if horizontal or vertical collision is stronger
-            if (minHorizontal < minVertical)
+            if (tmpBall.Right > tmpPaddle.Left && tmpBall.Left < tmpPaddle.Right) // Ball within block's width
             {
-                return (deltaLeft < deltaRight) ? CollisionSide.Left : CollisionSide.Right;
+                if (tmpBall.Bottom > tmpPaddle.Top && tmpBall.Top < tmpPaddle.Bottom)
+                {
+                    if (tmpBall.Bottom > tmpPaddle.Top && tmpBall.Top < tmpPaddle.Top ||
+                        tmpBall.Top < tmpPaddle.Bottom && tmpBall.Bottom > tmpPaddle.Bottom)
+                        return true;
+                }
             }
-            else
-            {
-                return (deltaTop < deltaBottom) ? CollisionSide.Top : CollisionSide.Bottom;
-            }
+            return false;
         }
 
+        private bool LeftRightCollisionPaddle(Ball tmpBall, Paddle tmpPaddle)
+        {
+            if (tmpBall.Bottom > tmpPaddle.Top && tmpBall.Top < tmpPaddle.Bottom) // Ball within block's height
+            {
+                if (tmpBall.Right > tmpPaddle.Left && tmpBall.Left < tmpPaddle.Right)
+                {
+                    if (tmpBall.Right > tmpPaddle.Left && tmpBall.Left < tmpPaddle.Left ||
+                        tmpBall.Left < tmpPaddle.Right && tmpBall.Right > tmpPaddle.Right)
+                        return true;
+                }
+            }
+            return false;
+        }
 
+        private bool TopBottomCollisionBlock(Ball tmpBall, Block tmpBlock)
+        {
+            if (tmpBall.Right > tmpBlock.Left && tmpBall.Left < tmpBlock.Right) // Ball within block's width
+            {
+                if (tmpBall.Bottom > tmpBlock.Top && tmpBall.Top < tmpBlock.Bottom)
+                {
+                    if (tmpBall.Bottom > tmpBlock.Top && tmpBall.Top < tmpBlock.Top || 
+                        tmpBall.Top < tmpBlock.Bottom && tmpBall.Bottom > tmpBlock.Bottom)
+                        return true;
+                }
+            }
+            return false;
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        private bool LeftRightCollisionBlock(Ball tmpBall, Block tmpBlock)
+        {
+            if (tmpBall.Bottom > tmpBlock.Top && tmpBall.Top < tmpBlock.Bottom) // Ball within block's height
+            {
+                if (tmpBall.Right > tmpBlock.Left && tmpBall.Left < tmpBlock.Right)
+                {
+                    if (tmpBall.Right > tmpBlock.Left && tmpBall.Left < tmpBlock.Left || 
+                        tmpBall.Left < tmpBlock.Right && tmpBall.Right > tmpBlock.Right)
+                        return true;
+                }
+            }
+            return false;
+        }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -179,7 +162,6 @@ namespace ITEC145FinalProject
                     break;
             }
         }
-
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
             switch (e.KeyData)

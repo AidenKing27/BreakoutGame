@@ -23,16 +23,14 @@ namespace ITEC145FinalProject
 
         private Random rnd = new Random();
 
-        bool _xPositive;
-        bool _yPositive;
-
-        public int X { get { return _x; } }
-        public int Y { get { return _y; } }
-        public int Width { get { return _width; } }
-        public int Height { get { return _height; } }
-        public bool XPositive { get { return _xPositive; } }
-        public bool YPositive { get { return _yPositive; } }
-
+        public int Width
+        { 
+            get { return _width; } 
+        }
+        public int Height 
+        { 
+            get { return _height; } 
+        }
         public int Left
         {
             get { return _x; }
@@ -50,31 +48,25 @@ namespace ITEC145FinalProject
             get { return _y + _height; }
         }
 
-
         public Ball(int x, int y)
         {
             _xSpeed = 12;
             _ySpeed = 12;
-            _xPositive = true;
-            _yPositive = true;
             _width = 30;
             _height = 30;
             _x = x;
             _y = y;
             _brush = new SolidBrush(_color);
-
         }
 
         public void ChangeDirectionY()
         {
             _ySpeed *= -1;
-            _yPositive = !_yPositive;
         }
 
         public void ChangeDirectionX()
         {
             _xSpeed *= -1;
-            _xPositive = !_xPositive;
         }
 
         public void Draw(Graphics gr)
@@ -82,32 +74,41 @@ namespace ITEC145FinalProject
             _x += _xSpeed;
             _y += _ySpeed;
 
+            //original
             if (_x + _width > mainForm.ClientSize.Width)
             {
                 _xSpeed *= -1;
-                _xPositive = !_xPositive;
             }
-                
-
             if (_x <= 0)
             {
                 _xSpeed *= -1;
-                _xPositive = !_xPositive;
             }
-                
-
-            if (_y + _height > mainForm.ClientSize.Height)
+            if (_y + _height >  mainForm.ClientSize.Height)
             {
-                _y = 5;
+                _y = 10;
             }
-                
-
             if (_y <= 0)
             {
                 _ySpeed *= -1;
-                _yPositive = !_yPositive;
             }
-                
+
+            //test
+            if (_x + _width > mainForm.picGameArea.Width)
+            {
+                _xSpeed *= -1;
+            }
+            if (_x <= mainForm.picGameArea.Left)
+            {
+                _xSpeed *= -1;
+            }
+            if (_y + _height > mainForm.picGameArea.Height)
+            {
+                _y = mainForm.picGameArea.Top + 10;
+            }
+            if (_y <= mainForm.picGameArea.Top)
+            {
+                _ySpeed *= -1;
+            }
 
             gr.FillEllipse(_brush, _x, _y, _width, _height);
         }

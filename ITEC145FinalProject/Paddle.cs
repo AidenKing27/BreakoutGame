@@ -16,15 +16,30 @@ namespace ITEC145FinalProject
         private Color _color = Color.Red;
         private Brush _brush;
 
-        public int X { get { return _x; } }
-        public int Y { get { return _y; } }
         public int Width { get { return _width; } }
         public int Height { get { return _height; } }
 
+        public int Left
+        {
+            get { return _x; }
+        }
+        public int Right
+        {
+            get { return _x + _width; }
+        }
+        public int Top
+        {
+            get { return _y; }
+        }
+        public int Bottom
+        {
+            get { return _y + _height; }
+        }
+
         public Paddle(int x, int y)
         {
-            _width = 130;
-            _height = 10;
+            _width = 135;
+            _height = 15;
             _x = x;
             _y = y;
             _brush = new SolidBrush(_color);
