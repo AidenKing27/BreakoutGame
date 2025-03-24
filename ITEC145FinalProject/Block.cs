@@ -12,11 +12,7 @@ namespace ITEC145FinalProject
         private int _y;
         private int _width;
         private int _height;
-        private Color _color = Color.Purple;
-        private Brush _brush;
-
-        public int Width { get { return _width; } }
-        public int Height { get { return _height; } }
+        private PictureBox picBlock = new PictureBox();
 
         public int Left
         {
@@ -35,20 +31,18 @@ namespace ITEC145FinalProject
             get { return _y + _height; }
         }
 
-
-
         public Block(int x, int y)
         {
+            picBlock.Image = new Bitmap("pineapple.png");
             _width = 100;
             _height = 35;
             _x = x;
             _y = y;
-            _brush = new SolidBrush(_color);
         }
 
         public void Draw(Graphics gr)
         {
-            gr.FillRectangle(_brush, _x, _y, _width, _height);
+            gr.DrawImage(picBlock.Image, _x, _y, _width, _height);
         }
     }
 }

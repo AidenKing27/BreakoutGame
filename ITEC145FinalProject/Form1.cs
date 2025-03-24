@@ -7,23 +7,25 @@ namespace ITEC145FinalProject
     {
         //lists of objects
         List<Ball> balls = new List<Ball>();
-        List<Paddle> paddles = new List<Paddle>();
         List<Block> blocks = new List<Block>();
 
         //object instances
         Ball ball = new Ball(100, 300);
         Paddle paddle = new Paddle(225, 700);
-        Block block1 = new Block(40, 120);
-        Block block2 = new Block(155, 120);
-        Block block3 = new Block(265, 120);
-        Block block4 = new Block(375, 120);
+
+
+        Block block1 = new Block(60, 120);
+        Block block2 = new Block(170, 120);
+        Block block3 = new Block(280, 120);
+        Block block4 = new Block(390, 120);
+        Block block5 = new Block(500, 120);
 
         //enum for paddle movement
         enum KPress { none = 0, right = 1, left = 2 };
         KPress kPaddle = KPress.none;
 
         public PictureBox picGameArea = new PictureBox();
-        
+
 
 
 
@@ -31,9 +33,9 @@ namespace ITEC145FinalProject
         {
             InitializeComponent();
             Ball.mainForm = this;
+            Paddle.mainForm = this;
 
             picGameArea.Location = new Point(25, 107);
-            picGameArea.BackColor = Color.Transparent;
             picGameArea.Size = new Size(600, 650);
 
 
@@ -44,22 +46,24 @@ namespace ITEC145FinalProject
 
             //add objects to lists
             balls.Add(ball);
-            paddles.Add(paddle);
             blocks.Add(block1);
             blocks.Add(block2);
             blocks.Add(block3);
             blocks.Add(block4);
+            blocks.Add(block5);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             //draw the ball, paddle, and block(s)
+
             foreach (Ball ball in balls)
                 ball.Draw(e.Graphics);
-            foreach (Paddle paddle in paddles)
-                paddle.Draw(e.Graphics);
+               
             foreach (Block block in blocks)
                 block.Draw(e.Graphics);
+
+            paddle.Draw(e.Graphics);
 
             //collision detection
             foreach (Ball ball in balls)

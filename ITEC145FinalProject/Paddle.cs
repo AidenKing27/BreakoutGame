@@ -9,15 +9,13 @@ namespace ITEC145FinalProject
 {
     public class Paddle
     {
+        static public Form1 mainForm;
+
         private int _x;
         private int _y;
         private int _width;
         private int _height;
-        private Color _color = Color.Red;
-        private Brush _brush;
-
-        public int Width { get { return _width; } }
-        public int Height { get { return _height; } }
+        private PictureBox picPaddle = new PictureBox();
 
         public int Left
         {
@@ -38,25 +36,33 @@ namespace ITEC145FinalProject
 
         public Paddle(int x, int y)
         {
+            picPaddle.Image = new Bitmap("pineapple2.png");
             _width = 135;
             _height = 15;
             _x = x;
             _y = y;
-            _brush = new SolidBrush(_color);
         }
 
         public void MoveLeft()
         {
-            _x -= 8;
+            _x -= 10;
         }
         public void MoveRight()
         {
-            _x += 8;
+            _x += 10;
         }
 
         public void Draw(Graphics gr)
         {
-            gr.FillRectangle(_brush, _x, _y, _width, _height);
+            //left side
+            if (_x <= mainForm.picGameArea.Left + 15)
+                _x = mainForm.picGameArea.Left + 15;
+            //right side
+            if (_x + _width >= mainForm.picGameArea.Width + 10)
+                _x = mainForm.picGameArea.Width - _width + 10;
+
+
+            gr.DrawImage(picPaddle.Image, _x, _y, _width, _height);
         }
     }
 }

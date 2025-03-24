@@ -23,14 +23,6 @@ namespace ITEC145FinalProject
 
         private Random rnd = new Random();
 
-        public int Width
-        { 
-            get { return _width; } 
-        }
-        public int Height 
-        { 
-            get { return _height; } 
-        }
         public int Left
         {
             get { return _x; }
@@ -74,17 +66,6 @@ namespace ITEC145FinalProject
             _x += _xSpeed;
             _y += _ySpeed;
 
-            //original
-            //if (_x + _width > mainForm.ClientSize.Width)
-            //    _xSpeed *= -1;
-            //if (_x <= 0)
-            //    _xSpeed *= -1;
-            //if (_y + _height > mainForm.ClientSize.Height)
-            //    _y = 10;
-            //if (_y <= 0)
-            //    _ySpeed *= -1;
-
-            //test
             if (_x + _width > mainForm.picGameArea.Width + 25)
                 _xSpeed *= -1;
             if (_x <= mainForm.picGameArea.Left)
