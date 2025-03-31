@@ -44,7 +44,7 @@ namespace ITEC145FinalProject
 
         public Paddle(int x, int y)
         {
-            picPaddle.Image = new Bitmap("pineapple2.png");
+            picPaddle.Image = new Bitmap("paddle.png");
             _width = 135;
             _height = 15;
             _x = x;

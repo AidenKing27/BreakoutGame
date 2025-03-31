@@ -14,6 +14,7 @@ namespace ITEC145FinalProject
         private int _height;
         private int _health;
         private PictureBox picBlock = new PictureBox();
+        DateTime dt = DateTime.Now;
 
         public int Left
         {
@@ -46,7 +47,7 @@ namespace ITEC145FinalProject
 
         public Block(int x, int y, int health)
         {
-            picBlock.Image = new Bitmap("pineapple.png");
+            picBlock.Image = new Bitmap("block.png");
             _width = 100;
             _height = 35;
             _x = x;
@@ -56,7 +57,12 @@ namespace ITEC145FinalProject
 
         public void TakeDamage()
         {
-            _health -= 1;
+            TimeSpan ts = DateTime.Now - dt;
+            if (ts.TotalMilliseconds > 500)
+            {
+                dt = DateTime.Now;
+                _health -= 1;
+            }
         }
 
 

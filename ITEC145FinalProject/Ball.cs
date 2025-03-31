@@ -12,7 +12,7 @@ namespace ITEC145FinalProject
     {
         static public Form1 mainForm;
 
-        private const int XBASESPEED = 50;
+        private const int XBASESPEED = 30;
 
         private int _x;
         private int _y;
@@ -20,7 +20,8 @@ namespace ITEC145FinalProject
         private int _height;
         private int _xSpeed;
         private int _ySpeed;
-        private Color _color = Color.Black;
+        private int _lives;
+        private Color _color = Color.White;
         private Brush _brush;
 
         private Random _rnd = new Random();
@@ -49,9 +50,15 @@ namespace ITEC145FinalProject
         {
             get { return _height; }
         }
+        public int Lives
+        {
+            get { return _lives; }
+            set { _lives = value; }
+        }
 
         public Ball(int x, int y)
         {
+            _lives = 3;
             _xSpeed = -10;
             _ySpeed = -10;
             _width = 30;
@@ -77,7 +84,6 @@ namespace ITEC145FinalProject
             _xSpeed = Convert.ToInt32(XBASESPEED * slice);
         }
 
-
         public void Draw(Graphics gr)
         {
             _x += _xSpeed;
@@ -93,12 +99,13 @@ namespace ITEC145FinalProject
             if (_y <= mainForm.picGameArea.Top)
                 _ySpeed *= -1;
             //bottom wall
-            if (_y + _height > mainForm.picGameArea.Height + 107)
-            {
-                _x = mainForm.picGameArea.Width / 2;
-                _y = 650;
-                _ySpeed *= -1;
-            }
+            //if (_y + _height > mainForm.picGameArea.Height + 107)
+            //{
+            //    //_x = mainForm.picGameArea.Width / 2;
+            //    //_y = 650;
+            //    //_ySpeed *= -1;
+            //    _lives -= 1;
+            //}
 
             //draw the ball
             gr.FillEllipse(_brush, _x, _y, _width, _height);

@@ -15,48 +15,49 @@ namespace ITEC145FinalProject
         
 
         //blocks
-        Block block1 = new Block(60, 120, 2);
-        Block block2 = new Block(170, 120, 2);
-        Block block3 = new Block(280, 120, 2);
-        Block block4 = new Block(390, 120, 2);
-        Block block5 = new Block(500, 120, 2);
+        Block block1 = new Block(60, 140, 2);
+        Block block2 = new Block(170, 140, 2);
+        Block block3 = new Block(280, 140, 2);
+        Block block4 = new Block(390, 140, 2);
+        Block block5 = new Block(500, 140, 2);
 
-        Block block6 = new Block(60, 165, 2);
-        Block block7 = new Block(170, 165, 2);
-        Block block8 = new Block(280, 165, 2);
-        Block block9 = new Block(390, 165, 2);
-        Block block10 = new Block(500, 165, 2);
+        Block block6 = new Block(60, 185, 2);
+        Block block7 = new Block(170, 185, 2);
+        Block block8 = new Block(280, 185, 2);
+        Block block9 = new Block(390, 185, 2);
+        Block block10 = new Block(500, 185, 2);
 
-        Block block11 = new Block(60, 210, 2);
-        Block block12 = new Block(170, 210, 2);
-        Block block13 = new Block(280, 210, 2);
-        Block block14 = new Block(390, 210, 2);
-        Block block15 = new Block(500, 210, 2);
+        Block block11 = new Block(60, 230, 2);
+        Block block12 = new Block(170, 230, 2);
+        Block block13 = new Block(280, 230, 2);
+        Block block14 = new Block(390, 230, 2);
+        Block block15 = new Block(500, 230, 2);
 
-        Block block16 = new Block(60, 255, 2);
-        Block block17 = new Block(170, 255, 2);
-        Block block18 = new Block(280, 255, 2);
-        Block block19 = new Block(390, 255, 2);
-        Block block20 = new Block(500, 255, 2);
+        Block block16 = new Block(60, 275, 2);
+        Block block17 = new Block(170, 275, 2);
+        Block block18 = new Block(280, 275, 2);
+        Block block19 = new Block(390, 275, 2);
+        Block block20 = new Block(500, 275, 2);
 
         //enum for paddle movement
-        enum KPress { none = 0, right = 1, left = 2 };
+        enum KPress { none, right, left, up};
         KPress kPaddle = KPress.none;
 
         //GameArea picturebox
         public PictureBox picGameArea = new PictureBox();
 
         bool hasCollided = false;
+        bool spawnBall = false;
 
         public Form1()
         {
             InitializeComponent();
-            Ball ball = new Ball(paddle.Left + 50, paddle.Top - 25);
+
+            
+
             //link the classes to Form1
             Ball.mainForm = this;
             Paddle.mainForm = this;
-
-            int x;
 
             //GameArea picturebox (invisible)
             picGameArea.Location = new Point(25, 107);
@@ -67,8 +68,7 @@ namespace ITEC145FinalProject
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.UserPaint, true);
 
-            //add ball to list
-            balls.Add(ball);
+            
 
             //add blocks to list
             blocks.Add(block1);
@@ -83,17 +83,17 @@ namespace ITEC145FinalProject
             blocks.Add(block9);
             blocks.Add(block10);
 
-            blocks.Add(block11);
-            blocks.Add(block12);
-            blocks.Add(block13);
-            blocks.Add(block14);
-            blocks.Add(block15);
+            //blocks.Add(block11);
+            //blocks.Add(block12);
+            //blocks.Add(block13);
+            //blocks.Add(block14);
+            //blocks.Add(block15);
 
-            blocks.Add(block16);
-            blocks.Add(block17);
-            blocks.Add(block18);
-            blocks.Add(block19);
-            blocks.Add(block20);
+            //blocks.Add(block16);
+            //blocks.Add(block17);
+            //blocks.Add(block18);
+            //blocks.Add(block19);
+            //blocks.Add(block20);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -101,27 +101,43 @@ namespace ITEC145FinalProject
             //draw the paddle, ball, and block(s)
             paddle.Draw(e.Graphics);
 
-            foreach (Ball ball in balls)
-                ball.Draw(e.Graphics);
-               
+            if (spawnBall)
+            {
+                foreach (Ball ball in balls)
+                    ball.Draw(e.Graphics);
+            }
+            
             foreach (Block block in blocks)
                 block.Draw(e.Graphics);
 
             //collision detection checks
             foreach (Ball ball in balls)
             {
+                if (FallOffScreen(ball))
+                {
+                    ball.Lives -= 1;
+                }
+
                 if (TopBottomCollisionPaddle(ball, paddle))
                 {
+                    //calculates a slice value from 0 to 1 based on the position between very top to very bottom of paddle
                     double slice = (ball.Left + (ball.Width / 2)) - paddle.Left;
                     slice /= paddle.Width;
-                    // the above calculates a value from 0 to 1 based on the position between very top to very bottom of paddle
-                    if (slice < 0) slice = 0;
-                    if (slice > 1) slice = 1;
-                    slice -= .5;    // because value will always be between 0-1, -.5 will scale it
-                                    // to -.5 to +.5, regardless of paddle size
+                    
+                    //if the slice is slightly above or below 1 or 0, set to exactly 1 or 0 respectively
+                    if (slice < 0)
+                    {
+                        slice = 0;
+                    }
+                    if (slice > 1)
+                    {
+                        slice = 1;
+                    }
+                    //offset the slice from (0 <-> 1) to (-0.5 <-> 0.5) to account for positive and negative trajectories
+                    slice -= .5;
 
+                    //change direction based on the slice value
                     ball.ChangeDirectionBySlice(slice);
-
                 }
                 if (LeftRightCollisionPaddle(ball, paddle))
                 {
@@ -149,8 +165,8 @@ namespace ITEC145FinalProject
                             block.TakeDamage();
                         }
                     }
-                    hasCollided = false;
                 }
+                hasCollided = false;
             }
 
             //remove block from list if health is 0 or less
@@ -160,6 +176,16 @@ namespace ITEC145FinalProject
             //this will parse over all blocks in the List<Block> and check if their health is less than or equal to 0
             blocks.RemoveAll(block => block.Health <= 0);
         }
+
+        private bool FallOffScreen(Ball b)
+        {
+            if (b.Top >= picGameArea.Bottom)
+            {
+                return true;
+            }
+            return false;
+        }
+
 
         private bool TopBottomCollisionPaddle(Ball b, Paddle p)
         {
@@ -224,11 +250,29 @@ namespace ITEC145FinalProject
         private void timer1_Tick(object sender, EventArgs e)
         {
             //steve said this will force the Paint event to fire
-            this.Invalidate(false);   
+            this.Invalidate(false);
+
+            foreach (Ball ball in balls)
+            {
+                label1.Text = ball.Lives.ToString();
+            }
+            
 
             //paddle movement
             if ((kPaddle & KPress.left) == KPress.left) paddle.MoveLeft();
             if ((kPaddle & KPress.right) == KPress.right) paddle.MoveRight();
+            if ((kPaddle & KPress.up) == KPress.up)
+            {
+                if (!spawnBall)
+                {
+                    Ball ball = new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 30);
+                    //add ball to list
+                    balls.Add(ball);
+                    spawnBall = true;
+                }
+                
+            }
+
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -241,6 +285,9 @@ namespace ITEC145FinalProject
                 case Keys.Right:
                     kPaddle |= KPress.right;
                     break;
+                case Keys.Up:
+                    kPaddle |= KPress.up;
+                    break;
             }
         }
         private void Form1_KeyUp(object sender, KeyEventArgs e)
@@ -252,6 +299,9 @@ namespace ITEC145FinalProject
                     break;
                 case Keys.Right:
                     kPaddle &= ~KPress.right;
+                    break;
+                case Keys.Up:
+                    kPaddle &= ~KPress.up;
                     break;
             }
         }
