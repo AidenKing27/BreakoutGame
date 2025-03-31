@@ -12,6 +12,7 @@ namespace ITEC145FinalProject
         private int _y;
         private int _width;
         private int _height;
+        private int _health;
         private PictureBox picBlock = new PictureBox();
 
         public int Left
@@ -30,18 +31,38 @@ namespace ITEC145FinalProject
         {
             get { return _y + _height; }
         }
+        public int Health
+        {
+            get { return _health; }
+        }
+        public int Width
+        {
+            get { return _width; }
+        }
+        public int Height
+        {
+            get { return _height; }
+        }
 
-        public Block(int x, int y)
+        public Block(int x, int y, int health)
         {
             picBlock.Image = new Bitmap("pineapple.png");
             _width = 100;
             _height = 35;
             _x = x;
             _y = y;
+            _health = health;
         }
+
+        public void TakeDamage()
+        {
+            _health -= 1;
+        }
+
 
         public void Draw(Graphics gr)
         {
+            //draw the block(s)
             gr.DrawImage(picBlock.Image, _x, _y, _width, _height);
         }
     }

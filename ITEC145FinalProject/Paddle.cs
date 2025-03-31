@@ -33,6 +33,14 @@ namespace ITEC145FinalProject
         {
             get { return _y + _height; }
         }
+        public int Width
+        {
+            get { return _width; }
+        }
+        public int Height
+        {
+            get { return _height; }
+        }
 
         public Paddle(int x, int y)
         {
@@ -61,7 +69,7 @@ namespace ITEC145FinalProject
             if (_x + _width >= mainForm.picGameArea.Width + 10)
                 _x = mainForm.picGameArea.Width - _width + 10;
 
-
+            //draw the paddle
             gr.DrawImage(picPaddle.Image, _x, _y, _width, _height);
         }
     }
