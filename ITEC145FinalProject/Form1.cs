@@ -83,17 +83,17 @@ namespace ITEC145FinalProject
             blocks.Add(block9);
             blocks.Add(block10);
 
-            //blocks.Add(block11);
-            //blocks.Add(block12);
-            //blocks.Add(block13);
-            //blocks.Add(block14);
-            //blocks.Add(block15);
+            blocks.Add(block11);
+            blocks.Add(block12);
+            blocks.Add(block13);
+            blocks.Add(block14);
+            blocks.Add(block15);
 
-            //blocks.Add(block16);
-            //blocks.Add(block17);
-            //blocks.Add(block18);
-            //blocks.Add(block19);
-            //blocks.Add(block20);
+            blocks.Add(block16);
+            blocks.Add(block17);
+            blocks.Add(block18);
+            blocks.Add(block19);
+            blocks.Add(block20);
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
