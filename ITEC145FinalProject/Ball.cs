@@ -20,7 +20,8 @@ namespace ITEC145FinalProject
         private int _height;
         private int _xSpeed;
         private int _ySpeed;
-        private int _lives;
+        private System.Windows.Forms.Timer _timer;
+        private bool _isAlive = true;
         private Color _color = Color.White;
         private Brush _brush;
 
@@ -50,15 +51,15 @@ namespace ITEC145FinalProject
         {
             get { return _height; }
         }
-        public int Lives
+
+        public bool IsAlive
         {
-            get { return _lives; }
-            set { _lives = value; }
+            get { return _isAlive; }
+            set { _isAlive = value; }
         }
 
         public Ball(int x, int y)
         {
-            _lives = 3;
             _xSpeed = -10;
             _ySpeed = -10;
             _width = 30;
@@ -66,25 +67,13 @@ namespace ITEC145FinalProject
             _x = x;
             _y = y;
             _brush = new SolidBrush(_color);
+            _timer = new System.Windows.Forms.Timer();
+            _timer.Tick += _timer_Tick;
+            _timer.Enabled = true;
+            _timer.Interval = 20;
         }
 
-        public void ChangeDirectionY()
-        {
-            _ySpeed *= -1;
-        }
-
-        public void ChangeDirectionX()
-        {
-            _xSpeed *= -1;
-        }
-
-        public void ChangeDirectionBySlice(double slice)
-        {
-            _ySpeed *= -1;
-            _xSpeed = Convert.ToInt32(XBASESPEED * slice);
-        }
-
-        public void Draw(Graphics gr)
+        private void _timer_Tick(object? sender, EventArgs e)
         {
             _x += _xSpeed;
             _y += _ySpeed;
@@ -108,6 +97,27 @@ namespace ITEC145FinalProject
             //}
 
             //draw the ball
+        }
+
+
+        public void ChangeDirectionY()
+        {
+            _ySpeed *= -1;
+        }
+
+        public void ChangeDirectionX()
+        {
+            _xSpeed *= -1;
+        }
+
+        public void ChangeDirectionBySlice(double slice)
+        {
+            _ySpeed *= -1;
+            _xSpeed = Convert.ToInt32(XBASESPEED * slice);
+        }
+
+        public void Draw(Graphics gr)
+        {
             gr.FillEllipse(_brush, _x, _y, _width, _height);
         }
     }

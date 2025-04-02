@@ -15,6 +15,8 @@ namespace ITEC145FinalProject
         private int _y;
         private int _width;
         private int _height;
+        private int _lives;
+        private int _score;
         private PictureBox picPaddle = new PictureBox();
 
         public int Left
@@ -41,6 +43,16 @@ namespace ITEC145FinalProject
         {
             get { return _height; }
         }
+        public int Lives
+        {
+            get { return _lives; }
+            set { _lives = value; }
+        }
+        public int Score
+        {
+            get { return _score; }
+            set { _score = value; }
+        }
 
         public Paddle(int x, int y)
         {
@@ -49,6 +61,8 @@ namespace ITEC145FinalProject
             _height = 15;
             _x = x;
             _y = y;
+            _lives = 3;
+            _score = 0;
         }
 
         public void MoveLeft()
