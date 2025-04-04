@@ -5,6 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace ITEC145FinalProject
 {
@@ -63,18 +64,30 @@ namespace ITEC145FinalProject
             get { return _isAlive; }
             set { _isAlive = value; }
         }
+        public int XSpeed
+        {
+            get { return _xSpeed; }
+        }
+        public int YSpeed
+        {
+            get { return _ySpeed; }
+        }
 
         public Ball(int x, int y)
         {
-            _xSpeed = 0;
-            _ySpeed = 0;
+            int tmpSpeed = _rnd.Next(-10, 11);
+
+            if (tmpSpeed == 0)
+            {
+                tmpSpeed = _rnd.Next(0, 2) == 0 ? -1 : 1;
+            }
+            _xSpeed = tmpSpeed;
+            _ySpeed = -10;
             _width = 30;
             _height = 30;
             _x = x;
             _y = y;
-            //_brush = new SolidBrush(_color);
             picBall.Image = ball;
-
 
             _ballTimer = new System.Windows.Forms.Timer();
             _ballTimer.Tick += _ballTimer_Tick;
@@ -88,13 +101,13 @@ namespace ITEC145FinalProject
             _y += _ySpeed;
 
             //left wall
-            if (_x <= mainForm.picGameArea.Left)
+            if (_x <= mainForm.picGameArea.Left - 25)
                 _xSpeed *= -1;
             //right wall
-            if (_x + _width > mainForm.picGameArea.Width + 25)
+            if (_x + _width > mainForm.picGameArea.Width)
                 _xSpeed *= -1;
             //top wall
-            if (_y <= mainForm.picGameArea.Top)
+            if (_y <= mainForm.picGameArea.Top - 105)
                 _ySpeed *= -1;
         }
 
@@ -117,7 +130,6 @@ namespace ITEC145FinalProject
 
         public void Draw(Graphics gr)
         {
-            //gr.FillEllipse(_brush, _x, _y, _width, _height);
             gr.DrawImage(picBall.Image, _x, _y, _width, _height);
         }
     }

@@ -13,6 +13,7 @@ namespace ITEC145FinalProject
         private int _width;
         private int _height;
         private int _health;
+        private int _bColor;
         private PictureBox picBlock = new PictureBox();
         private Bitmap b1 = new Bitmap("block1.png");
         private Bitmap b2 = new Bitmap("block2.png");
@@ -20,6 +21,16 @@ namespace ITEC145FinalProject
         private Bitmap b4 = new Bitmap("block4.png");
         DateTime dt = DateTime.Now;
 
+        public int Y
+        {
+            get { return _y; }
+            set { _y = value; }
+        }
+        public int X
+        {
+            get { return _x; }
+            set { _x = value; }
+        }
         public int Left
         {
             get { return _x; }
@@ -39,6 +50,7 @@ namespace ITEC145FinalProject
         public int Health
         {
             get { return _health; }
+            set { _health = value; }
         }
         public int Width
         {
@@ -47,6 +59,10 @@ namespace ITEC145FinalProject
         public int Height
         {
             get { return _height; }
+        }
+        public int Colour
+        {
+            get { return _bColor; }
         }
 
         public Block(int x, int y, int health, int bColour)
@@ -57,35 +73,24 @@ namespace ITEC145FinalProject
             _x = x;
             _y = y;
             _health = health;
+            _bColor = bColour;
 
-            if (bColour == 1)
-            {
-                picBlock.Image = b1;
-            }
-            else if (bColour == 2)
-            {
-                picBlock.Image = b2;
-            }
-            else if (bColour == 3)
-            {
-                picBlock.Image = b3;
-            }
-            else if (bColour == 4)
-            {
-                picBlock.Image = b4;
-            }
+            if (bColour == 1) picBlock.Image = b1;
+            else if (bColour == 2) picBlock.Image = b2;
+            else if (bColour == 3) picBlock.Image = b3;
+            else if (bColour == 4) picBlock.Image = b4;
         }
 
         public void TakeDamage()
         {
             TimeSpan ts = DateTime.Now - dt;
-            if (ts.TotalMilliseconds > 500)
+            if (ts.TotalMilliseconds > 100)
             {
                 dt = DateTime.Now;
                 _health -= 1;
+                Form1.score += 50;
             }
         }
-
 
         public void Draw(Graphics gr)
         {

@@ -61,16 +61,6 @@ namespace ITEC145FinalProject.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap GameArea {
-            get {
-                object obj = ResourceManager.GetObject("GameArea", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         internal static byte[] Pixeboy {
@@ -87,16 +77,6 @@ namespace ITEC145FinalProject.Properties {
             get {
                 object obj = ResourceManager.GetObject("PressStart2P", resourceCulture);
                 return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap UI {
-            get {
-                object obj = ResourceManager.GetObject("UI", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

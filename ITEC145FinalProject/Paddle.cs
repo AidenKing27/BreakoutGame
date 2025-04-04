@@ -15,9 +15,6 @@ namespace ITEC145FinalProject
         private int _y;
         private int _width;
         private int _height;
-        private int _lives;
-        private int _score;
-        private int _level;
         private PictureBox picPaddle = new PictureBox();
         private Bitmap paddle = new Bitmap("paddle.png");
 
@@ -45,31 +42,14 @@ namespace ITEC145FinalProject
         {
             get { return _height; }
         }
-        public int Lives
-        {
-            get { return _lives; }
-            set { _lives = value; }
-        }
-        public int Score
-        {
-            get { return _score; }
-            set { _score = value; }
-        }
-        public int Level
-        {
-            get { return _level; }
-            set { _level = value; }
-        }
 
         public Paddle(int x, int y)
         {
-            picPaddle.Image = paddle; 
             _width = 135;
-            _height = 20;
+            _height = 15;
             _x = x;
             _y = y;
-            _lives = 3;
-            _score = 0;
+            picPaddle.Image = paddle; 
         }
 
         public void MoveLeft()
@@ -84,11 +64,11 @@ namespace ITEC145FinalProject
         public void Draw(Graphics gr)
         {
             //left side
-            if (_x <= mainForm.picGameArea.Left + 15)
-                _x = mainForm.picGameArea.Left + 15;
+            if (_x <= mainForm.picGameArea.Left - 25)
+                _x = mainForm.picGameArea.Left - 25;
             //right side
-            if (_x + _width >= mainForm.picGameArea.Width + 10)
-                _x = mainForm.picGameArea.Width - _width + 10;
+            if (_x + _width >= mainForm.picGameArea.Width)
+                _x = mainForm.picGameArea.Width - _width;
 
             //draw the paddle
             gr.DrawImage(picPaddle.Image, _x, _y, _width, _height);
