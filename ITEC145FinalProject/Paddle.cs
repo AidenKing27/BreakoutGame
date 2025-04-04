@@ -17,7 +17,9 @@ namespace ITEC145FinalProject
         private int _height;
         private int _lives;
         private int _score;
+        private int _level;
         private PictureBox picPaddle = new PictureBox();
+        private Bitmap paddle = new Bitmap("paddle.png");
 
         public int Left
         {
@@ -53,12 +55,17 @@ namespace ITEC145FinalProject
             get { return _score; }
             set { _score = value; }
         }
+        public int Level
+        {
+            get { return _level; }
+            set { _level = value; }
+        }
 
         public Paddle(int x, int y)
         {
-            picPaddle.Image = new Bitmap("paddle.png");
+            picPaddle.Image = paddle; 
             _width = 135;
-            _height = 15;
+            _height = 20;
             _x = x;
             _y = y;
             _lives = 3;

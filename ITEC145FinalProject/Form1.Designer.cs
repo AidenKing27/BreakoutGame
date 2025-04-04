@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             timer1 = new System.Windows.Forms.Timer(components);
             lblScore = new Label();
+            label1 = new Label();
             SuspendLayout();
             // 
             // timer1
@@ -43,15 +44,25 @@
             // lblScore
             // 
             lblScore.BackColor = Color.Transparent;
-            lblScore.Font = new Font("Cascadia Mono", 26F, FontStyle.Bold);
+            lblScore.Font = new Font("Segoe UI", 24F);
             lblScore.ForeColor = Color.White;
-            lblScore.Location = new Point(194, 26);
+            lblScore.Location = new Point(193, 31);
             lblScore.Name = "lblScore";
-            lblScore.Size = new Size(265, 52);
+            lblScore.Size = new Size(265, 46);
             lblScore.TabIndex = 0;
             lblScore.Text = "00000";
-            lblScore.TextAlign = ContentAlignment.TopCenter;
+            lblScore.TextAlign = ContentAlignment.MiddleCenter;
             lblScore.UseCompatibleTextRendering = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(531, 41);
+            label1.Name = "label1";
+            label1.Size = new Size(37, 21);
+            label1.TabIndex = 1;
+            label1.Text = "label1";
+            label1.UseCompatibleTextRendering = true;
             // 
             // Form1
             // 
@@ -59,7 +70,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Center;
-            ClientSize = new Size(650, 782);
+            ClientSize = new Size(650, 780);
+            Controls.Add(label1);
             Controls.Add(lblScore);
             DoubleBuffered = true;
             Name = "Form1";
@@ -68,11 +80,13 @@
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private System.Windows.Forms.Timer timer1;
         private Label lblScore;
+        private Label label1;
     }
 }

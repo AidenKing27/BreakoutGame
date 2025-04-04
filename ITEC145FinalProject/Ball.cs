@@ -14,18 +14,24 @@ namespace ITEC145FinalProject
 
         private const int XBASESPEED = 30;
 
+        private System.Windows.Forms.Timer _ballTimer;
+
+        private Random _rnd = new Random();
+
         private int _x;
         private int _y;
         private int _width;
         private int _height;
         private int _xSpeed;
         private int _ySpeed;
-        private System.Windows.Forms.Timer _timer;
         private bool _isAlive = true;
-        private Color _color = Color.White;
-        private Brush _brush;
 
-        private Random _rnd = new Random();
+        //private Color _color = Color.White;
+        //private Brush _brush;
+
+        private PictureBox picBall = new PictureBox();
+        private Bitmap ball = new Bitmap("ball3.png");
+
 
         public int Left
         {
@@ -60,20 +66,23 @@ namespace ITEC145FinalProject
 
         public Ball(int x, int y)
         {
-            _xSpeed = -10;
-            _ySpeed = -10;
+            _xSpeed = 0;
+            _ySpeed = 0;
             _width = 30;
             _height = 30;
             _x = x;
             _y = y;
-            _brush = new SolidBrush(_color);
-            _timer = new System.Windows.Forms.Timer();
-            _timer.Tick += _timer_Tick;
-            _timer.Enabled = true;
-            _timer.Interval = 20;
+            //_brush = new SolidBrush(_color);
+            picBall.Image = ball;
+
+
+            _ballTimer = new System.Windows.Forms.Timer();
+            _ballTimer.Tick += _ballTimer_Tick;
+            _ballTimer.Enabled = true;
+            _ballTimer.Interval = 20;
         }
 
-        private void _timer_Tick(object? sender, EventArgs e)
+        private void _ballTimer_Tick(object? sender, EventArgs e)
         {
             _x += _xSpeed;
             _y += _ySpeed;
@@ -87,16 +96,6 @@ namespace ITEC145FinalProject
             //top wall
             if (_y <= mainForm.picGameArea.Top)
                 _ySpeed *= -1;
-            //bottom wall
-            //if (_y + _height > mainForm.picGameArea.Height + 107)
-            //{
-            //    //_x = mainForm.picGameArea.Width / 2;
-            //    //_y = 650;
-            //    //_ySpeed *= -1;
-            //    _lives -= 1;
-            //}
-
-            //draw the ball
         }
 
 
@@ -118,7 +117,8 @@ namespace ITEC145FinalProject
 
         public void Draw(Graphics gr)
         {
-            gr.FillEllipse(_brush, _x, _y, _width, _height);
+            //gr.FillEllipse(_brush, _x, _y, _width, _height);
+            gr.DrawImage(picBall.Image, _x, _y, _width, _height);
         }
     }
 }

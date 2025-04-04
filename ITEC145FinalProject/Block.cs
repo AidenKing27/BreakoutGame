@@ -14,6 +14,10 @@ namespace ITEC145FinalProject
         private int _height;
         private int _health;
         private PictureBox picBlock = new PictureBox();
+        private Bitmap b1 = new Bitmap("block1.png");
+        private Bitmap b2 = new Bitmap("block2.png");
+        private Bitmap b3 = new Bitmap("block3.png");
+        private Bitmap b4 = new Bitmap("block4.png");
         DateTime dt = DateTime.Now;
 
         public int Left
@@ -45,14 +49,31 @@ namespace ITEC145FinalProject
             get { return _height; }
         }
 
-        public Block(int x, int y, int health)
+        public Block(int x, int y, int health, int bColour)
         {
-            picBlock.Image = new Bitmap("block.png");
-            _width = 100;
+            
+            _width = 80;
             _height = 35;
             _x = x;
             _y = y;
             _health = health;
+
+            if (bColour == 1)
+            {
+                picBlock.Image = b1;
+            }
+            else if (bColour == 2)
+            {
+                picBlock.Image = b2;
+            }
+            else if (bColour == 3)
+            {
+                picBlock.Image = b3;
+            }
+            else if (bColour == 4)
+            {
+                picBlock.Image = b4;
+            }
         }
 
         public void TakeDamage()

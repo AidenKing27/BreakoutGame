@@ -17,32 +17,36 @@ namespace ITEC145FinalProject
 
 
         //blocks
-        Block block1 = new Block(60, 140, 2);
-        Block block2 = new Block(170, 140, 2);
-        Block block3 = new Block(280, 140, 2);
-        Block block4 = new Block(390, 140, 2);
-        Block block5 = new Block(500, 140, 2);
+        Block block01 = new Block(60, 140, 1, 1);
+        Block block02 = new Block(150, 140, 1, 1);
+        Block block03 = new Block(240, 140, 1, 1);
+        Block block04 = new Block(330, 140, 1, 1);
+        Block block05 = new Block(420, 140, 1, 1);
+        Block block06 = new Block(510, 140, 1, 1);
 
-        Block block6 = new Block(60, 185, 2);
-        Block block7 = new Block(170, 185, 2);
-        Block block8 = new Block(280, 185, 2);
-        Block block9 = new Block(390, 185, 2);
-        Block block10 = new Block(500, 185, 2);
+        Block block07 = new Block(60, 185, 1, 2);
+        Block block08 = new Block(150, 185, 1, 2);
+        Block block09 = new Block(240, 185, 1, 2);
+        Block block10 = new Block(330, 185, 1, 2);
+        Block block11 = new Block(420, 185, 1, 2);
+        Block block12 = new Block(510, 185, 1, 2);
 
-        Block block11 = new Block(60, 230, 2);
-        Block block12 = new Block(170, 230, 2);
-        Block block13 = new Block(280, 230, 2);
-        Block block14 = new Block(390, 230, 2);
-        Block block15 = new Block(500, 230, 2);
+        Block block13 = new Block(60, 230, 1, 3);
+        Block block14 = new Block(150, 230, 1, 3);
+        Block block15 = new Block(240, 230, 1, 3);
+        Block block16 = new Block(330, 230, 1, 3);
+        Block block17 = new Block(420, 230, 1, 3);
+        Block block18 = new Block(510, 230, 1, 3);
 
-        Block block16 = new Block(60, 275, 2);
-        Block block17 = new Block(170, 275, 2);
-        Block block18 = new Block(280, 275, 2);
-        Block block19 = new Block(390, 275, 2);
-        Block block20 = new Block(500, 275, 2);
+        Block block19 = new Block(60, 275, 1, 4);
+        Block block20 = new Block(150, 275, 1, 4);
+        Block block21 = new Block(240, 275, 1, 4);
+        Block block22 = new Block(330, 275, 1, 4);
+        Block block23 = new Block(420, 275, 1, 4);
+        Block block24 = new Block(510, 275, 1, 4);
 
         //enum for paddle movement
-        enum KPress { none, right, left, up };
+        enum KPress { none = 0, right = 1, left = 2, up = 4 };
         KPress kPaddle = KPress.none;
 
         //GameArea picturebox
@@ -52,10 +56,22 @@ namespace ITEC145FinalProject
         bool hasCollided = false;
         bool spawnBall = false;
 
+        //font object
+        PrivateFontCollection pfcPressStart2P = new PrivateFontCollection(); //PressStart2P
+        PrivateFontCollection pfcPixeboy = new PrivateFontCollection(); //Pixeboy
+
         public Form1()
         {
             InitializeComponent();
-            InitCustomLabelFont();
+
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+
+            //import and set fonts
+            InitPixeboyFont();
+            InitPressStart2PFont();
+            lblScore.Font = new Font(pfcPressStart2P.Families[0], lblScore.Font.Size); //PressStart2P
+            //lblScore.Font = new Font(pfcPixeboy.Families[0], lblScore.Font.Size); //Pixeboy
 
 
             //link the classes to Form1
@@ -66,11 +82,10 @@ namespace ITEC145FinalProject
             picGameArea.Location = new Point(25, 107);
             picGameArea.Size = new Size(600, 650);
 
-
             //picLives2.Image = new Bitmap("lives3.png");
             picLives2.BringToFront();
             picLives2.Location = new Point(25, 25);
-            picLives2.Size = new Size(138, 52);
+            picLives2.Size = new Size(140, 50);
             Controls.Add(picLives2);
 
             picLives2.BackColor = Color.Transparent;
@@ -80,52 +95,57 @@ namespace ITEC145FinalProject
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             this.SetStyle(ControlStyles.UserPaint, true);
 
-
-
             //add blocks to list
-            blocks.Add(block1);
-            blocks.Add(block2);
-            blocks.Add(block3);
-            blocks.Add(block4);
-            blocks.Add(block5);
+            blocks.Add(block01);
+            blocks.Add(block02);
+            blocks.Add(block03);
+            blocks.Add(block04);
+            blocks.Add(block05);
+            blocks.Add(block06);
 
-            blocks.Add(block6);
-            blocks.Add(block7);
-            blocks.Add(block8);
-            blocks.Add(block9);
+            blocks.Add(block07);
+            blocks.Add(block08);
+            blocks.Add(block09);
             blocks.Add(block10);
-
             blocks.Add(block11);
             blocks.Add(block12);
+
             blocks.Add(block13);
             blocks.Add(block14);
             blocks.Add(block15);
-
             blocks.Add(block16);
             blocks.Add(block17);
             blocks.Add(block18);
+
             blocks.Add(block19);
             blocks.Add(block20);
+            blocks.Add(block21);
+            blocks.Add(block22);
+            blocks.Add(block23);
+            blocks.Add(block24);
         }
 
-        void InitCustomLabelFont()
+
+        //found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
+        void InitPressStart2PFont()
         {
-            PrivateFontCollection pfc = new PrivateFontCollection();
-
-            int fontLength = Properties.Resources.Pixeboy.Length;
-
-            byte[] fontdata = Properties.Resources.Pixeboy;
+            int fontLength = Properties.Resources.PressStart2P.Length;
+            byte[] fontData = Properties.Resources.PressStart2P;
 
             System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+            Marshal.Copy(fontData, 0, data, fontLength);
+            pfcPressStart2P.AddMemoryFont(data, fontLength);
+        }
+        void InitPixeboyFont()
+        {
+            int fontLength = Properties.Resources.Pixeboy.Length;
+            byte[] fontData = Properties.Resources.Pixeboy;
 
-            Marshal.Copy(fontdata, 0, data, fontLength);
-
-            pfc.AddMemoryFont(data, fontLength);
-
-            lblScore.Font = new Font(pfc.Families[0], lblScore.Font.Size);
+            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+            Marshal.Copy(fontData, 0, data, fontLength);
+            pfcPixeboy.AddMemoryFont(data, fontLength);
         }
 
-        
 
 
 
@@ -142,7 +162,7 @@ namespace ITEC145FinalProject
             {
                 if (!spawnBall)
                 {
-                    Ball ball = new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 30);
+                    Ball ball = new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35);
                     balls.Add(ball);
                     spawnBall = true;
                 }
@@ -150,7 +170,7 @@ namespace ITEC145FinalProject
 
             if (paddle.Lives == 3)
             {
-                picLives2.Image = new Bitmap("lives3.png");
+                picLives2.Image = new Bitmap("lives3_2.png");
             }
             if (paddle.Lives == 2)
             {
@@ -169,7 +189,7 @@ namespace ITEC145FinalProject
 
             
             lblScore.Text = paddle.Score.ToString("d5");
-            
+            label1.Text = "";
             
 
 
