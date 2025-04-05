@@ -60,7 +60,6 @@ namespace ITEC145FinalProject
         {
             get { return _height; }
         }
-
         public bool IsAlive
         {
             get { return _isAlive; }

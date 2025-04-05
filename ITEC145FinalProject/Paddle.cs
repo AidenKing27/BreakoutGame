@@ -45,7 +45,7 @@ namespace ITEC145FinalProject
 
         public Paddle(int x, int y)
         {
-            _width = 135;
+            _width = 150;
             _height = 15;
             _x = x;
             _y = y;

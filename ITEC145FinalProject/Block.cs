@@ -26,12 +26,17 @@ namespace ITEC145FinalProject
         private int _y;
         private int _width;
         private int _height;
+        private int _ySpeed = 5;
         private int _health;
         private bool _isSpecialBlock;
         private int _bColor;
 
 
-
+        public int YSpeed
+        {
+            get { return _ySpeed; }
+            set { _ySpeed = value; }
+        }
         public int Y
         {
             get { return _y; }
@@ -125,6 +130,16 @@ namespace ITEC145FinalProject
                 _health -= 1;
                 Form1.score += 50;
             }
+        }
+
+        public void MoveDown()
+        {
+            _y += _ySpeed;
+        }
+
+        public void StopMoving()
+        {
+            _ySpeed = 0;
         }
 
         public void Draw(Graphics gr)

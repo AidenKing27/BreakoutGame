@@ -58,6 +58,7 @@ namespace ITEC145FinalProject
         bool mainBallSpawned = false;
         bool canShoot = false;
         bool spcBallSpawned = false;
+        bool isMoving = true;
         DateTime dt = DateTime.Now;
 
         //GameArea picturebox
@@ -146,8 +147,8 @@ namespace ITEC145FinalProject
                 block.Draw(e.Graphics);
 
             //draw the ball
-            foreach(Ball ball in balls)
-                if (ball.IsAlive) 
+            foreach (Ball ball in balls)
+                if (ball.IsAlive)
                     ball.Draw(e.Graphics);
 
             //foreach(Ball spcBall in spcBalls)
@@ -173,6 +174,7 @@ namespace ITEC145FinalProject
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+
             //steve said this will force the Paint event to fire
             picGameArea.Invalidate(false);
 
@@ -183,11 +185,24 @@ namespace ITEC145FinalProject
             {
                 if (!mainBallSpawned && canShoot)
                 {
-                    Ball ball = new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35);
-                    balls.Add(ball);
+                    balls.Add(new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35));
                     mainBallSpawned = true;
+                    canShoot = false;
+
                 }
+
             }
+
+            label1.Text = $"canShoot: {canShoot}";
+            label2.Text = $"hasCollied: {hasCollided}";
+            label3.Text = $"mainBallSpawned: {mainBallSpawned}";
+            label4.Text = $"spcBallSpawned: {spcBallSpawned}";
+            label6.Text = $"isMoving: {isMoving}";
+
+            label5.Text = $"tmpBalls: {tmpBalls.Count}";
+            label7.Text = $"balls: {balls.Count}";
+            
+
 
             //update the lives pictures
             if (lives == 3) picLives.Image = l3;
@@ -196,8 +211,8 @@ namespace ITEC145FinalProject
             if (lives == 0)
             {
                 picLives.Image = l0;
-                //gameTimer.Enabled = false;
-                //MessageBox.Show("YOU LOSE!");
+                gameTimer.Enabled = false;
+                MessageBox.Show("YOU LOSE!");
             }
 
             //update the score
@@ -205,28 +220,31 @@ namespace ITEC145FinalProject
 
             foreach (Block block in blocks)
             {
-                block.Y += 5;
+                if (isMoving)
+                {
+                    block.MoveDown();
+                    if (block.Y >= 60 && block.Colour == 1)
+                    {
+                        block.StopMoving();
+                        isMoving = false;
+                        canShoot = true;
+                    }
+                    if (block.Y == 105 && block.Colour == 2)
+                    {
+                        block.StopMoving();
+                    }
+                    if (block.Y == 150 && block.Colour == 3)
+                    {
+                        block.StopMoving();
+                    }
+                    if (block.Y == 195 && block.Colour == 4)
+                    {
+                        block.StopMoving();
+                    }
+                }
+                
 
-                if (block.Y >= 60 && block.Colour == 1)
-                {
-                    block.Y = 60;
-                    canShoot = true;
-                }
-                if (block.Y >= 105 && block.Colour == 2)
-                {
-                    block.Y = 105;
-                    canShoot = true;
-                }
-                if (block.Y >= 150 && block.Colour == 3)
-                {
-                    block.Y = 150;
-                    canShoot = true;
-                }
-                if (block.Y >= 195 && block.Colour == 4)
-                {
-                    block.Y = 195;
-                    canShoot = true;
-                }
+
             }
 
             //if all the blocks have been removed
@@ -260,6 +278,8 @@ namespace ITEC145FinalProject
                 blocks.Add(block22);
                 blocks.Add(block23);
                 blocks.Add(block24);
+
+                isMoving = true;
 
                 //increase the level
                 level += 1;
@@ -380,13 +400,8 @@ namespace ITEC145FinalProject
                 hasCollided = false;
             }
 
-            
-            if (spcBallSpawned)
-            {
-                balls.AddRange(tmpBalls);
-                spcBallSpawned = false;
-            }
-            
+            balls.AddRange(tmpBalls);
+            tmpBalls.Clear();
 
             //remove block from list if health is 0 or less
             //used ChatGPT to learn how the lambda expression and operator (=>) works
@@ -394,9 +409,25 @@ namespace ITEC145FinalProject
             //whichever case evaluates to true, remove from list
             //this will parse over all blocks in the List<Block> and check if their health is less than or equal to 0
             blocks.RemoveAll(block => block.Health <= 0);
-            balls.RemoveAll(ball => ball.IsAlive == false);;
+
+            //remove all dead balls
+            balls.RemoveAll(ball => !ball.IsAlive);
+
+            //if no main (non-special) balls exist after cleanup
+            bool anyMainBallsLeft = balls.Any(ball => !ball.IsSpecialBall);
+
+            //if the ball list has no entries,
+            //and you currently cannot shoot,
+            //and if there is no main balls left,
+            //and if the blocks are not moving
+            //then you can decrement the lives and reset your ability to shoot
+            if (balls.Count == 0 && !canShoot && !anyMainBallsLeft && !isMoving)
+            {
+                canShoot = true;
+                lives--;
+            }
         }
-        
+
 
 
         private void FallOffScreen(Ball b)
@@ -405,21 +436,18 @@ namespace ITEC145FinalProject
             {
                 b.IsAlive = false;
 
-                if (balls.Count <= 1)
+                if (b.IsSpecialBall)
                 {
-                    lives -= 1;
-
-                    if (b.IsSpecialBall)
-                    {
-                        spcBallSpawned = false;
-                    }
-                    else
-                    {
-                        mainBallSpawned = false;
-                    }
+                    spcBallSpawned = false;
+                    tmpBalls.Remove(b);
+                }
+                if (!b.IsSpecialBall)
+                {
+                    mainBallSpawned = false;
                 }
             }
         }
+
         private bool TopBottomCollisionPaddle(Ball b, Paddle p)
         {
             if (b.Right > p.Left && b.Left < p.Right)
