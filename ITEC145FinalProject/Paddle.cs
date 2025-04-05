@@ -54,11 +54,19 @@ namespace ITEC145FinalProject
 
         public void MoveLeft()
         {
-            _x -= 10;
+            _x -= 15;
         }
         public void MoveRight()
         {
-            _x += 10;
+            _x += 15;
+        }
+
+        public void Grow()
+        {
+            while (_width <= 300)
+            {
+                _width++;
+            }
         }
 
         public void Draw(Graphics gr)

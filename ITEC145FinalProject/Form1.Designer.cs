@@ -41,6 +41,9 @@
             label6 = new Label();
             label5 = new Label();
             label7 = new Label();
+            label8 = new Label();
+            label9 = new Label();
+            label10 = new Label();
             ((System.ComponentModel.ISupportInitialize)picGameArea).BeginInit();
             SuspendLayout();
             // 
@@ -91,7 +94,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(37, 117);
+            label1.Location = new Point(34, 631);
             label1.Name = "label1";
             label1.Size = new Size(38, 15);
             label1.TabIndex = 4;
@@ -100,7 +103,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(37, 142);
+            label2.Location = new Point(34, 656);
             label2.Name = "label2";
             label2.Size = new Size(38, 15);
             label2.TabIndex = 5;
@@ -109,7 +112,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(38, 165);
+            label3.Location = new Point(35, 679);
             label3.Name = "label3";
             label3.Size = new Size(38, 15);
             label3.TabIndex = 6;
@@ -118,7 +121,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(36, 189);
+            label4.Location = new Point(33, 703);
             label4.Name = "label4";
             label4.Size = new Size(38, 15);
             label4.TabIndex = 7;
@@ -127,7 +130,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(36, 215);
+            label6.Location = new Point(33, 729);
             label6.Name = "label6";
             label6.Size = new Size(38, 15);
             label6.TabIndex = 10;
@@ -136,7 +139,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(608, 116);
+            label5.Location = new Point(626, 703);
             label5.Name = "label5";
             label5.Size = new Size(38, 15);
             label5.TabIndex = 11;
@@ -145,11 +148,38 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(610, 143);
+            label7.Location = new Point(628, 730);
             label7.Name = "label7";
             label7.Size = new Size(38, 15);
             label7.TabIndex = 12;
             label7.Text = "label7";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(293, 107);
+            label8.Name = "label8";
+            label8.Size = new Size(38, 15);
+            label8.TabIndex = 13;
+            label8.Text = "label8";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(35, 606);
+            label9.Name = "label9";
+            label9.Size = new Size(38, 15);
+            label9.TabIndex = 14;
+            label9.Text = "label9";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(485, 107);
+            label10.Name = "label10";
+            label10.Size = new Size(44, 15);
+            label10.TabIndex = 15;
+            label10.Text = "label10";
             // 
             // Form1
             // 
@@ -159,6 +189,9 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Center;
             ClientSize = new Size(700, 780);
+            Controls.Add(label10);
+            Controls.Add(label9);
+            Controls.Add(label8);
             Controls.Add(label7);
             Controls.Add(label5);
             Controls.Add(label6);
@@ -192,5 +225,8 @@
         private Label label6;
         private Label label5;
         private Label label7;
+        private Label label8;
+        private Label label9;
+        private Label label10;
     }
 }

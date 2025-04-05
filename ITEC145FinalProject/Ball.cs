@@ -31,7 +31,7 @@ namespace ITEC145FinalProject
         private int _xSpeed;
         private int _ySpeed;
         private bool _isAlive = true;
-        private bool _isSpecialBall;
+        private bool _isSpecial;
         private const int XBASESPEED = 30;
 
 
@@ -73,26 +73,22 @@ namespace ITEC145FinalProject
         {
             get { return _ySpeed; }
         }
-        public bool IsSpecialBall
+        public bool IsSpecial
         {
-            get { return _isSpecialBall; }
+            get { return _isSpecial; }
         }
 
         public Ball(int x, int y)
         {
-            int tmpSpeed = _rnd.Next(-10, 11);
-
-            if (tmpSpeed == 0)
-            {
-                tmpSpeed = _rnd.Next(0, 2) == 0 ? -1 : 1;
-            }
-            _xSpeed = tmpSpeed;
+            _xSpeed = _rnd.Next(-10, 11);
+            if (_xSpeed == 0)
+                _xSpeed = _rnd.Next(0, 2) * 2 - 1;
             _ySpeed = -10;
             _width = 30;
             _height = 30;
             _x = x;
             _y = y;
-            _isSpecialBall = false;
+            _isSpecial = false;
 
             picBall.Image = ball0;
 
@@ -104,19 +100,14 @@ namespace ITEC145FinalProject
 
         public Ball(int x, int y, int ballColour)
         {
-            int tmpSpeed = _rnd.Next(-10, 11);
-            if (tmpSpeed == 0)
-            {
-                tmpSpeed = _rnd.Next(0, 2) == 0 ? -1 : 1;
-            }
-            _xSpeed = tmpSpeed;
+            _xSpeed = _rnd.Next(-3, 4);
             _ySpeed = 10;
 
             _width = 30;
             _height = 30;
             _x = x;
             _y = y;
-            _isSpecialBall = true;
+            _isSpecial = true;
 
             picBall.Image = ball0;
             if (ballColour == 1) picBall.Image = ball1;

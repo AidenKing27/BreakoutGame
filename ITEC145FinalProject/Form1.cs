@@ -62,7 +62,6 @@ namespace ITEC145FinalProject
         DateTime dt = DateTime.Now;
 
         //GameArea picturebox
-        //public PictureBox picGameAreaOLD = new PictureBox();
         public PictureBox picLives = new PictureBox();
 
         Bitmap l0 = new Bitmap("lives0.png");
@@ -146,15 +145,10 @@ namespace ITEC145FinalProject
             foreach (Block block in blocks)
                 block.Draw(e.Graphics);
 
-            //draw the ball
+            //draw the ball if its alive
             foreach (Ball ball in balls)
                 if (ball.IsAlive)
                     ball.Draw(e.Graphics);
-
-            //foreach(Ball spcBall in spcBalls)
-            //    if(spcBall.IsAlive) 
-            //        spcBall.Draw(e.Graphics);
-
         }
 
         //found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
@@ -174,7 +168,6 @@ namespace ITEC145FinalProject
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-
             //steve said this will force the Paint event to fire
             picGameArea.Invalidate(false);
 
@@ -188,11 +181,10 @@ namespace ITEC145FinalProject
                     balls.Add(new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35));
                     mainBallSpawned = true;
                     canShoot = false;
-
                 }
-
             }
 
+            //debugging
             label1.Text = $"canShoot: {canShoot}";
             label2.Text = $"hasCollied: {hasCollided}";
             label3.Text = $"mainBallSpawned: {mainBallSpawned}";
@@ -201,10 +193,11 @@ namespace ITEC145FinalProject
 
             label5.Text = $"tmpBalls: {tmpBalls.Count}";
             label7.Text = $"balls: {balls.Count}";
-            
 
+            label8.Text = $"block02 location: {block02.Left}, {block02.Top}";
+            label10.Text = $"block02 speed: {block02.YSpeed}";
 
-            //update the lives pictures
+            //update the lives pictures & check if the game should end
             if (lives == 3) picLives.Image = l3;
             if (lives == 2) picLives.Image = l2;
             if (lives == 1) picLives.Image = l1;
@@ -218,34 +211,33 @@ namespace ITEC145FinalProject
             //update the score
             lblScore.Text = score.ToString("d5");
 
-            foreach (Block block in blocks)
+            //block movement
+            if (isMoving)
             {
-                if (isMoving)
+                foreach (Block block in blocks)
                 {
                     block.MoveDown();
-                    if (block.Y >= 60 && block.Colour == 1)
+
+                    bool shouldStop =
+                        (block.Colour == 1 && block.Top >= 60) ||
+                        (block.Colour == 2 && block.Top >= 105) ||
+                        (block.Colour == 3 && block.Top >= 150) ||
+                        (block.Colour == 4 && block.Top >= 195);
+
+                    if (shouldStop)
                     {
                         block.StopMoving();
-                        isMoving = false;
-                        canShoot = true;
-                    }
-                    if (block.Y == 105 && block.Colour == 2)
-                    {
-                        block.StopMoving();
-                    }
-                    if (block.Y == 150 && block.Colour == 3)
-                    {
-                        block.StopMoving();
-                    }
-                    if (block.Y == 195 && block.Colour == 4)
-                    {
-                        block.StopMoving();
+                        block.Moving = false;
+
+                        if (block.Colour == 1)
+                        {
+                            isMoving = false;
+                            canShoot = true;
+                        }
                     }
                 }
-                
-
-
             }
+
 
             //if all the blocks have been removed
             if (blocks.Count == 0)
@@ -279,32 +271,27 @@ namespace ITEC145FinalProject
                 blocks.Add(block23);
                 blocks.Add(block24);
 
+                //reset the moving property
                 isMoving = true;
 
-                //increase the level
+                //increase and display the level
                 level += 1;
                 lblLevel.Text = $"LVL:{level:d2}";
 
+                //health and position resets
                 foreach (Block block in blocks)
                 {
+                    block.Moving = true;
+                    block.YSpeed = 5;
                     //reset the health
                     block.Health = 1;
                     //reset the Y position based on its colour
-                    if (block.Colour == 1) block.Y = -250;
-                    if (block.Colour == 2) block.Y = -205;
-                    if (block.Colour == 3) block.Y = -160;
-                    if (block.Colour == 4) block.Y = -115;
+                    if (block.Colour == 1) block.ResetLocation(1);
+                    if (block.Colour == 2) block.ResetLocation(2);
+                    if (block.Colour == 3) block.ResetLocation(3);
+                    if (block.Colour == 4) block.ResetLocation(4);
                 }
             }
-
-
-
-
-
-
-
-
-
 
             //detection checks for the main ball
             foreach (Ball ball in balls)
@@ -343,7 +330,7 @@ namespace ITEC145FinalProject
                             hasCollided = true;
                             block.TakeDamage();
                             //was the block a special block
-                            if (block.IsSpecialBlock)
+                            if (block.IsSpawner)
                             {
                                 TimeSpan ts = DateTime.Now - dt;
                                 if (ts.TotalMilliseconds > 100)
@@ -355,11 +342,15 @@ namespace ITEC145FinalProject
                                         case 2:
                                         case 3:
                                         case 4:
-                                            tmpBalls.Add(new Ball(block.X + block.Width / 2, block.Y + block.Height, block.Colour));
+                                            tmpBalls.Add(new Ball(block.Left + block.Width / 2, block.Top + block.Height, block.Colour));
                                             spcBallSpawned = true;
                                             break;
                                     }
                                 }
+                            }
+                            if (block.IsGrower)
+                            {
+                                paddle.Grow();
                             }
                         }
 
@@ -375,7 +366,7 @@ namespace ITEC145FinalProject
                             hasCollided = true;
                             block.TakeDamage();
                             //was the block a special block
-                            if (block.IsSpecialBlock)
+                            if (block.IsSpawner)
                             {
                                 TimeSpan ts = DateTime.Now - dt;
                                 if (ts.TotalMilliseconds > 100)
@@ -387,11 +378,15 @@ namespace ITEC145FinalProject
                                         case 2:
                                         case 3:
                                         case 4:
-                                            tmpBalls.Add(new Ball(block.X + block.Width / 2, block.Y + block.Height, block.Colour));
+                                            tmpBalls.Add(new Ball(block.Left + block.Width / 2, block.Top + block.Height, block.Colour));
                                             spcBallSpawned = true;
                                             break;
                                     }
                                 }
+                            }
+                            if (block.IsGrower)
+                            {
+                                paddle.Grow();
                             }
                         }
 
@@ -414,7 +409,7 @@ namespace ITEC145FinalProject
             balls.RemoveAll(ball => !ball.IsAlive);
 
             //if no main (non-special) balls exist after cleanup
-            bool anyMainBallsLeft = balls.Any(ball => !ball.IsSpecialBall);
+            bool anyMainBallsLeft = balls.Any(ball => !ball.IsSpecial);
 
             //if the ball list has no entries,
             //and you currently cannot shoot,
@@ -436,12 +431,12 @@ namespace ITEC145FinalProject
             {
                 b.IsAlive = false;
 
-                if (b.IsSpecialBall)
+                if (b.IsSpecial)
                 {
                     spcBallSpawned = false;
                     tmpBalls.Remove(b);
                 }
-                if (!b.IsSpecialBall)
+                if (!b.IsSpecial)
                 {
                     mainBallSpawned = false;
                 }

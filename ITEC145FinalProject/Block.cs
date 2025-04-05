@@ -9,13 +9,14 @@ namespace ITEC145FinalProject
     public class Block
     {
         private Bitmap b1 = new Bitmap("block1.png");
-        private Bitmap b1s = new Bitmap("block1special.png");
+        private Bitmap b1s = new Bitmap("block1spawn.png");
+        private Bitmap b1g = new Bitmap("block1grow.png");
         private Bitmap b2 = new Bitmap("block2.png");
-        private Bitmap b2s = new Bitmap("block2special.png");
+        private Bitmap b2s = new Bitmap("block2spawn.png");
         private Bitmap b3 = new Bitmap("block3.png");
-        private Bitmap b3s = new Bitmap("block3special.png");
+        private Bitmap b3s = new Bitmap("block3spawn.png");
         private Bitmap b4 = new Bitmap("block4.png");
-        private Bitmap b4s = new Bitmap("block4special.png");
+        private Bitmap b4s = new Bitmap("block4spawn.png");
 
         private PictureBox picBlock = new PictureBox();
 
@@ -26,26 +27,22 @@ namespace ITEC145FinalProject
         private int _y;
         private int _width;
         private int _height;
-        private int _ySpeed = 5;
+        private int _ySpeed;
+        private bool _moving;
         private int _health;
-        private bool _isSpecialBlock;
+        private bool _isSpawner;
+        private bool _isGrower;
         private int _bColor;
 
-
+        public bool Moving
+        {
+            get { return _moving; }
+            set { _moving = value; }
+        }
         public int YSpeed
         {
             get { return _ySpeed; }
             set { _ySpeed = value; }
-        }
-        public int Y
-        {
-            get { return _y; }
-            set { _y = value; }
-        }
-        public int X
-        {
-            get { return _x; }
-            set { _x = value; }
         }
         public int Left
         {
@@ -80,44 +77,56 @@ namespace ITEC145FinalProject
         {
             get { return _bColor; }
         }
-        public bool IsSpecialBlock
+        public bool IsSpawner
         {
-            get { return _isSpecialBlock; }
+            get { return _isSpawner; }
+        }
+        public bool IsGrower
+        {
+            get { return _isGrower; }
         }
 
         public Block(int x, int y, int health, int blockColour)
         {
-            if (_rnd.Next(10) == 0)
-            {
-                _isSpecialBlock = true;
+            switch (_rnd.Next(10)) {
+                case 1:
+                    _isSpawner = true;
+                    break;
+                case 2:
+                    _isGrower = true;
+                    break;
             }
-            
             _width = 80;
             _height = 35;
             _x = x;
             _y = y;
+            _ySpeed = 5;
             _health = health;
             _bColor = blockColour;
 
             if (blockColour == 1)
             {
                 picBlock.Image = b1;
-                if (_isSpecialBlock) picBlock.Image = b1s;
+                if (_isSpawner) picBlock.Image = b1s;
+                if (_isGrower) picBlock.Image = b1g;
             }
             else if (blockColour == 2) 
             {
                 picBlock.Image = b2;
-                if (_isSpecialBlock) picBlock.Image = b2s;
+                if (_isSpawner) picBlock.Image = b2s;
+                if (_isGrower) picBlock.Image = b1g;
             }
             else if (blockColour == 3) 
             {
                 picBlock.Image = b3;
-                if (_isSpecialBlock) picBlock.Image = b3s;
+                if (_isSpawner) picBlock.Image = b3s;
+                if (_isGrower) picBlock.Image = b1g;
             }
             else if (blockColour == 4) 
             {
                 picBlock.Image = b4;
-                if (_isSpecialBlock) picBlock.Image = b4s;
+                if (_isSpawner) picBlock.Image = b4s;
+                if (_isGrower) picBlock.Image = b1g;
             }
         }
 
@@ -140,6 +149,13 @@ namespace ITEC145FinalProject
         public void StopMoving()
         {
             _ySpeed = 0;
+        }
+        public void ResetLocation(int block)
+        {
+            if (block == 1) _y = -250;
+            if (block == 2) _y = -205;
+            if (block == 3) _y = -160;
+            if (block == 4) _y = -115;
         }
 
         public void Draw(Graphics gr)
