@@ -326,11 +326,16 @@ namespace ITEC145FinalProject
                         ball.ChangeDirectionY();
                         if (!hasCollided)
                         {
+                            
+                            
+                            hasCollided = true;
+                            block.TakeDamage();
+                        }
+                        if (block.IsSpecial)
+                        {
                             Ball ball2 = new Ball(350, 350);
                             newBalls.Add(ball2);
                             //balls.Add(ball2);
-                            hasCollided = true;
-                            block.TakeDamage();
                         }
                     }
                     //check if the ball has collided on either the left or the right of the blocks
