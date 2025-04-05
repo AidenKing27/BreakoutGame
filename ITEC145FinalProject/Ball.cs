@@ -13,11 +13,16 @@ namespace ITEC145FinalProject
     {
         static public Form1 mainForm;
 
-        private const int XBASESPEED = 30;
+        private Bitmap ball0 = new Bitmap("ball0.png");
+        private Bitmap ball1 = new Bitmap("ball1.png");
+        private Bitmap ball2 = new Bitmap("ball2.png");
+        private Bitmap ball3 = new Bitmap("ball3.png");
+        private Bitmap ball4 = new Bitmap("ball4.png");
 
-        private System.Windows.Forms.Timer _ballTimer;
-
+        private PictureBox picBall = new PictureBox();
+        
         private Random _rnd = new Random();
+        private System.Windows.Forms.Timer _ballTimer;
 
         private int _x;
         private int _y;
@@ -26,12 +31,9 @@ namespace ITEC145FinalProject
         private int _xSpeed;
         private int _ySpeed;
         private bool _isAlive = true;
+        private bool _isSpecialBall;
+        private const int XBASESPEED = 30;
 
-        //private Color _color = Color.White;
-        //private Brush _brush;
-
-        private PictureBox picBall = new PictureBox();
-        private Bitmap ball = new Bitmap("ball3.png");
 
 
         public int Left
@@ -72,6 +74,10 @@ namespace ITEC145FinalProject
         {
             get { return _ySpeed; }
         }
+        public bool IsSpecialBall
+        {
+            get { return _isSpecialBall; }
+        }
 
         public Ball(int x, int y)
         {
@@ -87,7 +93,37 @@ namespace ITEC145FinalProject
             _height = 30;
             _x = x;
             _y = y;
-            picBall.Image = ball;
+            _isSpecialBall = false;
+
+            picBall.Image = ball0;
+
+            _ballTimer = new System.Windows.Forms.Timer();
+            _ballTimer.Tick += _ballTimer_Tick;
+            _ballTimer.Enabled = true;
+            _ballTimer.Interval = 20;
+        }
+
+        public Ball(int x, int y, int ballColour)
+        {
+            int tmpSpeed = _rnd.Next(-10, 11);
+            if (tmpSpeed == 0)
+            {
+                tmpSpeed = _rnd.Next(0, 2) == 0 ? -1 : 1;
+            }
+            _xSpeed = tmpSpeed;
+            _ySpeed = 10;
+
+            _width = 30;
+            _height = 30;
+            _x = x;
+            _y = y;
+            _isSpecialBall = true;
+
+            picBall.Image = ball0;
+            if (ballColour == 1) picBall.Image = ball1;
+            if (ballColour == 2) picBall.Image = ball2;
+            if (ballColour == 3) picBall.Image = ball3;
+            if (ballColour == 4) picBall.Image = ball4;
 
             _ballTimer = new System.Windows.Forms.Timer();
             _ballTimer.Tick += _ballTimer_Tick;

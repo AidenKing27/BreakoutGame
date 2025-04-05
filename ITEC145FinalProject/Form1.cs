@@ -13,7 +13,8 @@ namespace ITEC145FinalProject
 
         //lists of objects
         List<Ball> balls = new List<Ball>();
-        List<Ball> newBalls = new List<Ball>();
+        //List<Ball> spcBalls = new List<Ball>();
+        List<Ball> tmpBalls = new List<Ball>();
         List<Block> blocks = new List<Block>();
 
         //paddle
@@ -54,8 +55,10 @@ namespace ITEC145FinalProject
         int lives = 3;
         int level;
         bool hasCollided = false;
-        bool spawnBall = false;
+        bool mainBallSpawned = false;
         bool canShoot = false;
+        bool spcBallSpawned = false;
+        DateTime dt = DateTime.Now;
 
         //GameArea picturebox
         //public PictureBox picGameAreaOLD = new PictureBox();
@@ -74,8 +77,8 @@ namespace ITEC145FinalProject
         {
             InitializeComponent();
 
+            //set GameArea backcolour
             picGameArea.BackColor = Color.FromArgb(38, 38, 38);
-
 
             //fixed form size
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -90,18 +93,12 @@ namespace ITEC145FinalProject
             Ball.mainForm = this;
             Paddle.mainForm = this;
 
-            //GameArea picturebox (invisible)
-            //picGameArea.Location = new Point(25, 107);
-            //picGameArea.Size = new Size(650, 650);
-
             //Lives picturebox (transparent)
             picLives.Location = new Point(25, 25);
             picLives.Size = new Size(140, 50);
             picLives.BackColor = Color.Transparent;
             picLives.BringToFront();
             Controls.Add(picLives);
-
-
 
             //Steve said to add these for optimizations
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -149,11 +146,14 @@ namespace ITEC145FinalProject
                 block.Draw(e.Graphics);
 
             //draw the ball
-            if (spawnBall)
-            {
-                foreach (Ball ball in balls)
+            foreach(Ball ball in balls)
+                if (ball.IsAlive) 
                     ball.Draw(e.Graphics);
-            }
+
+            //foreach(Ball spcBall in spcBalls)
+            //    if(spcBall.IsAlive) 
+            //        spcBall.Draw(e.Graphics);
+
         }
 
         //found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
@@ -171,7 +171,7 @@ namespace ITEC145FinalProject
 
 
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void gameTimer_Tick(object sender, EventArgs e)
         {
             //steve said this will force the Paint event to fire
             picGameArea.Invalidate(false);
@@ -181,11 +181,11 @@ namespace ITEC145FinalProject
             if ((kPaddle & KPress.right) == KPress.right) paddle.MoveRight();
             if ((kPaddle & KPress.up) == KPress.up)
             {
-                if (!spawnBall && canShoot)
+                if (!mainBallSpawned && canShoot)
                 {
                     Ball ball = new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35);
                     balls.Add(ball);
-                    spawnBall = true;
+                    mainBallSpawned = true;
                 }
             }
 
@@ -196,8 +196,8 @@ namespace ITEC145FinalProject
             if (lives == 0)
             {
                 picLives.Image = l0;
-                timer1.Enabled = false;
-                MessageBox.Show("YOU LOSE!");
+                //gameTimer.Enabled = false;
+                //MessageBox.Show("YOU LOSE!");
             }
 
             //update the score
@@ -269,27 +269,24 @@ namespace ITEC145FinalProject
                 {
                     //reset the health
                     block.Health = 1;
-                    //reset the Y to off the screen for each block
-                    if (block.Colour == 1)
-                    {
-                        block.Y = -250;
-                    }
-                    if (block.Colour == 2)
-                    {
-                        block.Y = -205;
-                    }
-                    if (block.Colour == 3)
-                    {
-                        block.Y = -160;
-                    }
-                    if (block.Colour == 4)
-                    {
-                        block.Y = -115;
-                    }
+                    //reset the Y position based on its colour
+                    if (block.Colour == 1) block.Y = -250;
+                    if (block.Colour == 2) block.Y = -205;
+                    if (block.Colour == 3) block.Y = -160;
+                    if (block.Colour == 4) block.Y = -115;
                 }
             }
 
-            //detection checks for the ball
+
+
+
+
+
+
+
+
+
+            //detection checks for the main ball
             foreach (Ball ball in balls)
             {
                 //check if it has fallen off the bottom of the screen
@@ -311,11 +308,6 @@ namespace ITEC145FinalProject
                     //change direction based on the slice value
                     ball.ChangeDirectionBySlice(slice);
                 }
-                //check if the ball has collided on either the left or the right of the paddle
-                if (LeftRightCollisionPaddle(ball, paddle))
-                {
-                    //ball.ChangeDirectionX();
-                }
 
                 //detection checks for blocks (nested in ball loop)
                 foreach (Block block in blocks)
@@ -323,36 +315,78 @@ namespace ITEC145FinalProject
                     //check if the ball has collided on either the top or bottom of the blocks
                     if (TopBottomCollisionBlock(ball, block))
                     {
+                        //change Y direction
                         ball.ChangeDirectionY();
+                        //has it JUST collided
                         if (!hasCollided)
                         {
-                            
-                            
                             hasCollided = true;
                             block.TakeDamage();
+                            //was the block a special block
+                            if (block.IsSpecialBlock)
+                            {
+                                TimeSpan ts = DateTime.Now - dt;
+                                if (ts.TotalMilliseconds > 100)
+                                {
+                                    dt = DateTime.Now;
+                                    switch (block.Colour)
+                                    {
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                        case 4:
+                                            tmpBalls.Add(new Ball(block.X + block.Width / 2, block.Y + block.Height, block.Colour));
+                                            spcBallSpawned = true;
+                                            break;
+                                    }
+                                }
+                            }
                         }
-                        if (block.IsSpecial)
-                        {
-                            Ball ball2 = new Ball(350, 350);
-                            newBalls.Add(ball2);
-                            //balls.Add(ball2);
-                        }
+
                     }
                     //check if the ball has collided on either the left or the right of the blocks
                     if (LeftRightCollisionBlock(ball, block))
                     {
+                        //change X direction
                         ball.ChangeDirectionX();
+                        //has it JUST collided?
                         if (!hasCollided)
                         {
                             hasCollided = true;
                             block.TakeDamage();
+                            //was the block a special block
+                            if (block.IsSpecialBlock)
+                            {
+                                TimeSpan ts = DateTime.Now - dt;
+                                if (ts.TotalMilliseconds > 100)
+                                {
+                                    dt = DateTime.Now;
+                                    switch (block.Colour)
+                                    {
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                        case 4:
+                                            tmpBalls.Add(new Ball(block.X + block.Width / 2, block.Y + block.Height, block.Colour));
+                                            spcBallSpawned = true;
+                                            break;
+                                    }
+                                }
+                            }
                         }
+
                     }
                 }
                 hasCollided = false;
             }
 
-            balls.AddRange(newBalls);
+            
+            if (spcBallSpawned)
+            {
+                balls.AddRange(tmpBalls);
+                spcBallSpawned = false;
+            }
+            
 
             //remove block from list if health is 0 or less
             //used ChatGPT to learn how the lambda expression and operator (=>) works
@@ -360,9 +394,7 @@ namespace ITEC145FinalProject
             //whichever case evaluates to true, remove from list
             //this will parse over all blocks in the List<Block> and check if their health is less than or equal to 0
             blocks.RemoveAll(block => block.Health <= 0);
-            balls.RemoveAll(ball => ball.IsAlive == false);
-
-
+            balls.RemoveAll(ball => ball.IsAlive == false);;
         }
         
 
@@ -372,8 +404,20 @@ namespace ITEC145FinalProject
             if (b.Bottom >= picGameArea.Bottom)
             {
                 b.IsAlive = false;
-                spawnBall = false;
-                lives -= 1;
+
+                if (balls.Count <= 1)
+                {
+                    lives -= 1;
+
+                    if (b.IsSpecialBall)
+                    {
+                        spcBallSpawned = false;
+                    }
+                    else
+                    {
+                        mainBallSpawned = false;
+                    }
+                }
             }
         }
         private bool TopBottomCollisionPaddle(Ball b, Paddle p)
@@ -390,20 +434,20 @@ namespace ITEC145FinalProject
             }
             return false;
         }
-        private bool LeftRightCollisionPaddle(Ball b, Paddle p)
-        {
-            if (b.Bottom > p.Top && b.Top < p.Bottom)
-            {
-                if (b.Right > p.Left && b.Left < p.Right)
-                {
-                    if (b.Right > p.Left && b.Left < p.Left || b.Left < p.Right && b.Right > p.Right)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+        //private bool LeftRightCollisionPaddle(Ball b, Paddle p)
+        //{
+        //    if (b.Bottom > p.Top && b.Top < p.Bottom)
+        //    {
+        //        if (b.Right > p.Left && b.Left < p.Right)
+        //        {
+        //            if (b.Right > p.Left && b.Left < p.Left || b.Left < p.Right && b.Right > p.Right)
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    return false;
+        //}
         private bool TopBottomCollisionBlock(Ball b, Block k)
         {
             if (b.Right > k.Left && b.Left < k.Right)

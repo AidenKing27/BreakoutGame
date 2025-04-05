@@ -30,18 +30,18 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            timer1 = new System.Windows.Forms.Timer(components);
+            gameTimer = new System.Windows.Forms.Timer(components);
             lblScore = new Label();
             lblLevel = new Label();
             picGameArea = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)picGameArea).BeginInit();
             SuspendLayout();
             // 
-            // timer1
+            // gameTimer
             // 
-            timer1.Enabled = true;
-            timer1.Interval = 20;
-            timer1.Tick += timer1_Tick;
+            gameTimer.Enabled = true;
+            gameTimer.Interval = 20;
+            gameTimer.Tick += gameTimer_Tick;
             // 
             // lblScore
             // 
@@ -103,7 +103,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer gameTimer;
         private Label lblScore;
         private Label lblLevel;
         public PictureBox picGameArea;

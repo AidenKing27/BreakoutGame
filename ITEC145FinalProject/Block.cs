@@ -8,15 +8,6 @@ namespace ITEC145FinalProject
 {
     public class Block
     {
-        private int _x;
-        private int _y;
-        private int _width;
-        private int _height;
-        private int _health;
-        private bool _isSpecial;
-        private int _bColor;
-        private Random _rnd = new Random();
-        private PictureBox picBlock = new PictureBox();
         private Bitmap b1 = new Bitmap("block1.png");
         private Bitmap b1s = new Bitmap("block1special.png");
         private Bitmap b2 = new Bitmap("block2.png");
@@ -25,7 +16,21 @@ namespace ITEC145FinalProject
         private Bitmap b3s = new Bitmap("block3special.png");
         private Bitmap b4 = new Bitmap("block4.png");
         private Bitmap b4s = new Bitmap("block4special.png");
+
+        private PictureBox picBlock = new PictureBox();
+
+        private Random _rnd = new Random();
         DateTime dt = DateTime.Now;
+
+        private int _x;
+        private int _y;
+        private int _width;
+        private int _height;
+        private int _health;
+        private bool _isSpecialBlock;
+        private int _bColor;
+
+
 
         public int Y
         {
@@ -70,16 +75,16 @@ namespace ITEC145FinalProject
         {
             get { return _bColor; }
         }
-        public bool IsSpecial
+        public bool IsSpecialBlock
         {
-            get { return _isSpecial; }
+            get { return _isSpecialBlock; }
         }
 
-        public Block(int x, int y, int health, int bColour)
+        public Block(int x, int y, int health, int blockColour)
         {
             if (_rnd.Next(10) == 0)
             {
-                _isSpecial = true;
+                _isSpecialBlock = true;
             }
             
             _width = 80;
@@ -87,29 +92,28 @@ namespace ITEC145FinalProject
             _x = x;
             _y = y;
             _health = health;
-            _bColor = bColour;
+            _bColor = blockColour;
 
-            if (bColour == 1)
+            if (blockColour == 1)
             {
                 picBlock.Image = b1;
-                if (_isSpecial) picBlock.Image = b1s;
+                if (_isSpecialBlock) picBlock.Image = b1s;
             }
-            else if (bColour == 2) 
+            else if (blockColour == 2) 
             {
                 picBlock.Image = b2;
-                if (_isSpecial) picBlock.Image = b2s;
+                if (_isSpecialBlock) picBlock.Image = b2s;
             }
-            else if (bColour == 3) 
+            else if (blockColour == 3) 
             {
                 picBlock.Image = b3;
-                if (_isSpecial) picBlock.Image = b3s;
+                if (_isSpecialBlock) picBlock.Image = b3s;
             }
-            else if (bColour == 4) 
+            else if (blockColour == 4) 
             {
                 picBlock.Image = b4;
-                if (_isSpecial) picBlock.Image = b4s;
+                if (_isSpecialBlock) picBlock.Image = b4s;
             }
-            
         }
 
         public void TakeDamage()
