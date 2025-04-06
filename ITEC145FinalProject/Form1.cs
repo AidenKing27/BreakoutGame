@@ -13,9 +13,9 @@ namespace ITEC145FinalProject
 
         //lists of objects
         List<Ball> balls = new List<Ball>();
-        //List<Ball> spcBalls = new List<Ball>();
         List<Ball> tmpBalls = new List<Ball>();
         List<Block> blocks = new List<Block>();
+        List<OneUp> oneUPs = new List<OneUp>();
 
         //paddle
         Paddle paddle = new Paddle(285, 573);
@@ -69,6 +69,7 @@ namespace ITEC145FinalProject
         Bitmap l2 = new Bitmap("lives2.png");
         Bitmap l3 = new Bitmap("lives3.png");
 
+        Random rnd = new Random();
 
         //font object
         PrivateFontCollection pfcPressStart2P = new PrivateFontCollection(); //PressStart2P
@@ -149,6 +150,18 @@ namespace ITEC145FinalProject
             foreach (Ball ball in balls)
                 if (ball.IsAlive)
                     ball.Draw(e.Graphics);
+
+            //draw the oneUp as well as do collision detection w/ the paddle
+            foreach (OneUp oneUp in oneUPs)
+            {
+                oneUp.Draw(e.Graphics);
+                oneUp.Fall();
+                if (CollisionPaddle1UP(oneUp, paddle))
+                {
+                    lives++;
+                    oneUp.IsUsed = true;
+                }
+            }
         }
 
         //found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
@@ -184,19 +197,6 @@ namespace ITEC145FinalProject
                 }
             }
 
-            //debugging
-            label1.Text = $"canShoot: {canShoot}";
-            label2.Text = $"hasCollied: {hasCollided}";
-            label3.Text = $"mainBallSpawned: {mainBallSpawned}";
-            label4.Text = $"spcBallSpawned: {spcBallSpawned}";
-            label6.Text = $"isMoving: {isMoving}";
-
-            label5.Text = $"tmpBalls: {tmpBalls.Count}";
-            label7.Text = $"balls: {balls.Count}";
-
-            label8.Text = $"block02 location: {block02.Left}, {block02.Top}";
-            label10.Text = $"block02 speed: {block02.YSpeed}";
-
             //update the lives pictures & check if the game should end
             if (lives == 3) picLives.Image = l3;
             if (lives == 2) picLives.Image = l2;
@@ -206,12 +206,17 @@ namespace ITEC145FinalProject
                 picLives.Image = l0;
                 gameTimer.Enabled = false;
                 MessageBox.Show("YOU LOSE!");
+                Application.Restart();
             }
 
             //update the score
             lblScore.Text = score.ToString("d5");
 
             //block movement
+            //shout my guy chatgpt for reworking my original logic
+            //essentially moves the blocks down from off the screen
+            //once they hit the spot they need to, stop moving and update booleans to allow for shooting
+            //chatgpt added the "shouldStop" boolean and seems to work nicely
             if (isMoving)
             {
                 foreach (Block block in blocks)
@@ -243,33 +248,40 @@ namespace ITEC145FinalProject
             if (blocks.Count == 0)
             {
                 //add them all back
+                //blue
                 blocks.Add(block01);
                 blocks.Add(block02);
                 blocks.Add(block03);
                 blocks.Add(block04);
                 blocks.Add(block05);
                 blocks.Add(block06);
-
+                //red
                 blocks.Add(block07);
                 blocks.Add(block08);
                 blocks.Add(block09);
                 blocks.Add(block10);
                 blocks.Add(block11);
                 blocks.Add(block12);
-
+                //yellow
                 blocks.Add(block13);
                 blocks.Add(block14);
                 blocks.Add(block15);
                 blocks.Add(block16);
                 blocks.Add(block17);
                 blocks.Add(block18);
-
+                //green
                 blocks.Add(block19);
                 blocks.Add(block20);
                 blocks.Add(block21);
                 blocks.Add(block22);
                 blocks.Add(block23);
                 blocks.Add(block24);
+
+                //regenerate property
+                foreach (Block block in blocks)
+                {
+                    block.SetBlocks(block.Colour);
+                }
 
                 //reset the moving property
                 isMoving = true;
@@ -282,25 +294,22 @@ namespace ITEC145FinalProject
                 foreach (Block block in blocks)
                 {
                     block.Moving = true;
-                    block.YSpeed = 5;
+                    block.Speed = 5;
                     //reset the health
                     block.Health = 1;
                     //reset the Y position based on its colour
-                    if (block.Colour == 1) block.ResetLocation(1);
-                    if (block.Colour == 2) block.ResetLocation(2);
-                    if (block.Colour == 3) block.ResetLocation(3);
-                    if (block.Colour == 4) block.ResetLocation(4);
+                    block.ResetLocation();
                 }
             }
 
-            //detection checks for the main ball
+            //detection checks for the all balls
             foreach (Ball ball in balls)
             {
                 //check if it has fallen off the bottom of the screen
                 FallOffScreen(ball);
 
                 //check if the ball has collided on either the top or bottom of the paddle
-                if (TopBottomCollisionPaddle(ball, paddle))
+                if (CollisionPaddleBall(ball, paddle))
                 {
                     //calculates a slice value from 0 to 1 based on the position between very top to very bottom of paddle
                     double slice = (ball.Left + (ball.Width / 2)) - paddle.Left;
@@ -316,7 +325,7 @@ namespace ITEC145FinalProject
                     ball.ChangeDirectionBySlice(slice);
                 }
 
-                //detection checks for blocks (nested in ball loop)
+                //detection checks for all blocks (nested in ball loop)
                 foreach (Block block in blocks)
                 {
                     //check if the ball has collided on either the top or bottom of the blocks
@@ -324,12 +333,15 @@ namespace ITEC145FinalProject
                     {
                         //change Y direction
                         ball.ChangeDirectionY();
-                        //has it JUST collided
+
+                        //no idea if this is working but if i touch it the world might explode
                         if (!hasCollided)
                         {
+                            //no idea if this is working but if i touch it the world might explode
                             hasCollided = true;
                             block.TakeDamage();
-                            //was the block a special block
+
+                            //is it a spawner block
                             if (block.IsSpawner)
                             {
                                 TimeSpan ts = DateTime.Now - dt;
@@ -348,10 +360,12 @@ namespace ITEC145FinalProject
                                     }
                                 }
                             }
-                            if (block.IsGrower)
-                            {
-                                paddle.Grow();
-                            }
+                            //is it a grower block
+                            if (block.IsGrower) paddle.Grow();
+                            //is it a life block
+                            if (block.Is1UP) oneUPs.Add(new OneUp(block.Left + block.Width / 2, block.Top + block.Height));
+                            //is it a strong block
+                            if (block.IsStrong) block.Break();
                         }
 
                     }
@@ -360,14 +374,18 @@ namespace ITEC145FinalProject
                     {
                         //change X direction
                         ball.ChangeDirectionX();
-                        //has it JUST collided?
+
+                        //no idea if this is working but if i touch it the world might explode
                         if (!hasCollided)
                         {
+                            //no idea if this is working but if i touch it the world might explode
                             hasCollided = true;
                             block.TakeDamage();
-                            //was the block a special block
+
+                            //is it a spawner block
                             if (block.IsSpawner)
                             {
+                                //no idea if this is working but if i touch it the world might explode
                                 TimeSpan ts = DateTime.Now - dt;
                                 if (ts.TotalMilliseconds > 100)
                                 {
@@ -384,27 +402,31 @@ namespace ITEC145FinalProject
                                     }
                                 }
                             }
-                            if (block.IsGrower)
-                            {
-                                paddle.Grow();
-                            }
+                            //is it a grower block
+                            if (block.IsGrower) paddle.Grow();
+                            //is it a life block
+                            if (block.Is1UP) oneUPs.Add(new OneUp(block.Left + block.Width / 2, block.Top + block.Height));
+                            //is it a strong block
+                            if (block.IsStrong) block.Break();
                         }
-
                     }
                 }
+                //no idea if this is working but if i touch it the world might explode
                 hasCollided = false;
             }
-
+            //add any special balls from the tmpBalls list to the main list and clear the tmpBalls list
             balls.AddRange(tmpBalls);
             tmpBalls.Clear();
 
-            //remove block from list if health is 0 or less
+
             //used ChatGPT to learn how the lambda expression and operator (=>) works
             //the RemoveAll function takes an argument, either true or false
-            //whichever case evaluates to true, remove from list
-            //this will parse over all blocks in the List<Block> and check if their health is less than or equal to 0
-            blocks.RemoveAll(block => block.Health <= 0);
+            //this will parse over all items in the lists and check their condition and remove them from the list
 
+            //remove block from list if health is 0 or less
+            blocks.RemoveAll(block => block.Health <= 0);
+            //remove oneups from list if it is used
+            oneUPs.RemoveAll(oneUp => oneUp.IsUsed);
             //remove all dead balls
             balls.RemoveAll(ball => !ball.IsAlive);
 
@@ -424,7 +446,7 @@ namespace ITEC145FinalProject
         }
 
 
-
+        //falling off screen checks to set the ball's alive property and to remove anything that needs to be removed
         private void FallOffScreen(Ball b)
         {
             if (b.Bottom >= picGameArea.Bottom)
@@ -442,35 +464,7 @@ namespace ITEC145FinalProject
                 }
             }
         }
-
-        private bool TopBottomCollisionPaddle(Ball b, Paddle p)
-        {
-            if (b.Right > p.Left && b.Left < p.Right)
-            {
-                if (b.Bottom > p.Top && b.Top < p.Bottom)
-                {
-                    if (b.Bottom > p.Top && b.Top < p.Top || b.Top < p.Bottom && b.Bottom > p.Bottom)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        //private bool LeftRightCollisionPaddle(Ball b, Paddle p)
-        //{
-        //    if (b.Bottom > p.Top && b.Top < p.Bottom)
-        //    {
-        //        if (b.Right > p.Left && b.Left < p.Right)
-        //        {
-        //            if (b.Right > p.Left && b.Left < p.Left || b.Left < p.Right && b.Right > p.Right)
-        //            {
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
+        //top and bottom collision detection between block and ball
         private bool TopBottomCollisionBlock(Ball b, Block k)
         {
             if (b.Right > k.Left && b.Left < k.Right)
@@ -485,6 +479,7 @@ namespace ITEC145FinalProject
             }
             return false;
         }
+        //left and right collision detection between block and ball
         private bool LeftRightCollisionBlock(Ball b, Block k)
         {
             if (b.Bottom > k.Top && b.Top < k.Bottom)
@@ -499,9 +494,37 @@ namespace ITEC145FinalProject
             }
             return false;
         }
+        //collision detection between paddle and ball
+        private bool CollisionPaddleBall(Ball b, Paddle p)
+        {
+            if (b.Right > p.Left && b.Left < p.Right)
+            {
+                if (b.Bottom > p.Top && b.Top < p.Bottom)
+                {
+                    if (b.Bottom > p.Top && b.Top < p.Top || b.Top < p.Bottom && b.Bottom > p.Bottom)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        //collision detection between paddle and 1UP
+        private bool CollisionPaddle1UP(OneUp o, Paddle p)
+        {
+            if (o.Right < p.Left)
+                return false;
+            if (p.Right < o.Left)
+                return false;
+            if (o.Bottom < p.Top)
+                return false;
+            if (p.Bottom < o.Top)
+                return false;
 
+            return true;
+        }
 
-
+        //paddle movement
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyData)

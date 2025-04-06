@@ -15,8 +15,11 @@ namespace ITEC145FinalProject
         private int _y;
         private int _width;
         private int _height;
+        private bool isGrown = false;
         private PictureBox picPaddle = new PictureBox();
         private Bitmap paddle = new Bitmap("paddle.png");
+        private CancellationTokenSource? _growCts;
+
 
         public int Left
         {
@@ -61,12 +64,66 @@ namespace ITEC145FinalProject
             _x += 15;
         }
 
-        public void Grow()
+        public async void Grow()
         {
-            while (_width <= 300)
+            //canceles any prior tokens, then creates a new cancellation token source
+            _growCts?.Cancel();
+            _growCts = new CancellationTokenSource();
+
+            //try catch to handle thrown exceptions
+            try
             {
-                _width++;
+                //grow 100 pixels
+                await Task.Delay(0, _growCts.Token);
+                if (_width != 250)
+                {
+                    _width += 20;
+                    _x -= 10;
+                }
+                await Task.Delay(25, _growCts.Token);
+                if (_width != 250)
+                {
+                    _width += 20;
+                    _x -= 10;
+                }
+                await Task.Delay(25, _growCts.Token);
+                if (_width != 250)
+                {
+                    _width += 20;
+                    _x -= 10;
+                }
+                await Task.Delay(25, _growCts.Token);
+                if (_width != 250)
+                {
+                    _width += 20;
+                    _x -= 10;
+                }
+                await Task.Delay(25, _growCts.Token);
+                if (_width != 250)
+                {
+                    _width += 20;
+                    _x -= 10;
+                }
+
+                //shrink back those 100 pixels
+                await Task.Delay(5000, _growCts.Token);
+                _width -= 20;
+                _x += 10;
+                await Task.Delay(25, _growCts.Token);
+                _width -= 20;
+                _x += 10;
+                await Task.Delay(25, _growCts.Token);
+                _width -= 20;
+                _x += 10;
+                await Task.Delay(25, _growCts.Token);
+                _width -= 20;
+                _x += 10;
+                await Task.Delay(25, _growCts.Token);
+                _width -= 20;
+                _x += 10;
+
             }
+            catch (TaskCanceledException) { /*swallow*/ }
         }
 
         public void Draw(Graphics gr)
@@ -78,7 +135,6 @@ namespace ITEC145FinalProject
             if (_x + _width >= mainForm.picGameArea.Width)
                 _x = mainForm.picGameArea.Width - _width;
 
-            //draw the paddle
             gr.DrawImage(picPaddle.Image, _x, _y, _width, _height);
         }
     }
