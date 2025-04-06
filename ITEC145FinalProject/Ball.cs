@@ -13,11 +13,11 @@ namespace ITEC145FinalProject
     {
         static public Form1 mainForm;
 
-        private Bitmap ball0 = new Bitmap("ball0.png");
-        private Bitmap ball1 = new Bitmap("ball1.png");
-        private Bitmap ball2 = new Bitmap("ball2.png");
-        private Bitmap ball3 = new Bitmap("ball3.png");
-        private Bitmap ball4 = new Bitmap("ball4.png");
+        private Bitmap ball0 = new Bitmap("../../../resources/ball0.png");
+        private Bitmap ball1 = new Bitmap("../../../resources/ball1.png");
+        private Bitmap ball2 = new Bitmap("../../../resources/ball2.png");
+        private Bitmap ball3 = new Bitmap("../../../resources/ball3.png");
+        private Bitmap ball4 = new Bitmap("../../../resources/ball4.png");
 
         private PictureBox picBall = new PictureBox();
         

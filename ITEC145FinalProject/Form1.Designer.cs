@@ -94,6 +94,7 @@
             Controls.Add(lblScore);
             DoubleBuffered = true;
             Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Breakout King";
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;

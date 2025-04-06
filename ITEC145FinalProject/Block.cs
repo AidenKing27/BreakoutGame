@@ -10,33 +10,33 @@ namespace ITEC145FinalProject
 {
     public class Block
     {
-        private Bitmap b1 = new Bitmap("block1.png");
-        private Bitmap b1s = new Bitmap("block1spawn.png");
-        private Bitmap b1g = new Bitmap("block1grow.png");
-        private Bitmap b1l = new Bitmap("block1life.png");
-        private Bitmap b1st = new Bitmap("block1strong.png");
-        private Bitmap b1w = new Bitmap("block1weak.png");
+        private Bitmap b1 = new Bitmap("../../../resources/block1.png");
+        private Bitmap b1s = new Bitmap("../../../resources/block1spawn.png");
+        private Bitmap b1g = new Bitmap("../../../resources/block1grow.png");
+        private Bitmap b1l = new Bitmap("../../../resources/block1life.png");
+        private Bitmap b1st = new Bitmap("../../../resources/block1strong.png");
+        private Bitmap b1w = new Bitmap("../../../resources/block1weak.png");
 
-        private Bitmap b2 = new Bitmap("block2.png");
-        private Bitmap b2s = new Bitmap("block2spawn.png");
-        private Bitmap b2g = new Bitmap("block2grow.png");
-        private Bitmap b2l = new Bitmap("block2life.png");
-        private Bitmap b2st = new Bitmap("block2strong.png");
-        private Bitmap b2w = new Bitmap("block2weak.png");
+        private Bitmap b2 = new Bitmap("../../../resources/block2.png");
+        private Bitmap b2s = new Bitmap("../../../resources/block2spawn.png");
+        private Bitmap b2g = new Bitmap("../../../resources/block2grow.png");
+        private Bitmap b2l = new Bitmap("../../../resources/block2life.png");
+        private Bitmap b2st = new Bitmap("../../../resources/block2strong.png");
+        private Bitmap b2w = new Bitmap("../../../resources/block2weak.png");
 
-        private Bitmap b3 = new Bitmap("block3.png");
-        private Bitmap b3s = new Bitmap("block3spawn.png");
-        private Bitmap b3g = new Bitmap("block3grow.png");
-        private Bitmap b3l = new Bitmap("block3life.png");
-        private Bitmap b3st = new Bitmap("block3strong.png");
-        private Bitmap b3w = new Bitmap("block3weak.png");
+        private Bitmap b3 = new Bitmap("../../../resources/block3.png");
+        private Bitmap b3s = new Bitmap("../../../resources/block3spawn.png");
+        private Bitmap b3g = new Bitmap("../../../resources/block3grow.png");
+        private Bitmap b3l = new Bitmap("../../../resources/block3life.png");
+        private Bitmap b3st = new Bitmap("../../../resources/block3strong.png");
+        private Bitmap b3w = new Bitmap("../../../resources/block3weak.png");
 
-        private Bitmap b4 = new Bitmap("block4.png");
-        private Bitmap b4s = new Bitmap("block4spawn.png");
-        private Bitmap b4g = new Bitmap("block4grow.png");
-        private Bitmap b4l = new Bitmap("block4life.png");
-        private Bitmap b4st = new Bitmap("block4strong.png");
-        private Bitmap b4w = new Bitmap("block4weak.png");
+        private Bitmap b4 = new Bitmap("../../../resources/block4.png");
+        private Bitmap b4s = new Bitmap("../../../resources/block4spawn.png");
+        private Bitmap b4g = new Bitmap("../../../resources/block4grow.png");
+        private Bitmap b4l = new Bitmap("../../../resources/block4life.png");
+        private Bitmap b4st = new Bitmap("../../../resources/block4strong.png");
+        private Bitmap b4w = new Bitmap("../../../resources/block4weak.png");
 
         private PictureBox picBlock = new PictureBox();
 

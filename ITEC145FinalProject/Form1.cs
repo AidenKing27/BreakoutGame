@@ -16,9 +16,11 @@ namespace ITEC145FinalProject
         List<Ball> tmpBalls = new List<Ball>();
         List<Block> blocks = new List<Block>();
         List<OneUp> oneUPs = new List<OneUp>();
+        List<TempBall> tempBalls = new List<TempBall>();
 
         //paddle
-        Paddle paddle = new Paddle(285, 573);
+        Paddle paddle = new Paddle(250, 600);
+        TempBall tempBall;
 
         //blocks
         //-250 -> 60
@@ -59,17 +61,17 @@ namespace ITEC145FinalProject
         bool canShoot = false;
         bool spcBallSpawned = false;
         bool isMoving = true;
+        bool tempBallSpawned = true;
         DateTime dt = DateTime.Now;
 
         //GameArea picturebox
         public PictureBox picLives = new PictureBox();
 
-        Bitmap l0 = new Bitmap("lives0.png");
-        Bitmap l1 = new Bitmap("lives1.png");
-        Bitmap l2 = new Bitmap("lives2.png");
-        Bitmap l3 = new Bitmap("lives3.png");
+        Bitmap l0 = new Bitmap("../../../resources/lives0.png");
+        Bitmap l1 = new Bitmap("../../../resources/lives1.png");
+        Bitmap l2 = new Bitmap("../../../resources/lives2.png");
+        Bitmap l3 = new Bitmap("../../../resources/lives3.png");
 
-        Random rnd = new Random();
 
         //font object
         PrivateFontCollection pfcPressStart2P = new PrivateFontCollection(); //PressStart2P
@@ -77,6 +79,9 @@ namespace ITEC145FinalProject
         public Form1()
         {
             InitializeComponent();
+
+            tempBall = new TempBall(paddle.Left + paddle.Width / 2 - 15, paddle.Top - paddle.Height - 15);
+            tempBalls.Add(tempBall);
 
             //set GameArea backcolour
             picGameArea.BackColor = Color.FromArgb(38, 38, 38);
@@ -142,6 +147,9 @@ namespace ITEC145FinalProject
             //draw the paddle
             paddle.Draw(e.Graphics);
 
+            if (tempBallSpawned)
+                tempBall.Draw(e.Graphics);
+
             //draw the blocks
             foreach (Block block in blocks)
                 block.Draw(e.Graphics);
@@ -162,6 +170,7 @@ namespace ITEC145FinalProject
                     oneUp.IsUsed = true;
                 }
             }
+
         }
 
         //found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
@@ -177,7 +186,27 @@ namespace ITEC145FinalProject
             pfcPressStart2P.AddMemoryFont(data, fontLength);
         }
 
-
+        //private void ReadHighScore()
+        //{
+        //    //Open a StreamReader for dynamicScores.txt and add every number to a list, then close it
+        //    StreamReader scoreInput = new StreamReader("../../../resources/highscores.txt");
+        //    while (scoreInput.EndOfStream == false)
+        //    {
+        //        string s = scoreInput.ReadLine();
+        //        dynamicScores.Add(double.Parse(s));
+        //    }
+        //    scoreInput.Close();
+        //    //foreach item in the list, check which number is the highest and set the variable
+        //    foreach (double x in dynamicScores)
+        //    {
+        //        if (x > dynamicHighScore)
+        //        {
+        //            dynamicHighScore = x;
+        //        }
+        //    }
+        //    //Display High Score
+        //    lblHighScore.Text = "High Score: " + dynamicHighScore.ToString("n2");
+        //}
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
@@ -185,8 +214,17 @@ namespace ITEC145FinalProject
             picGameArea.Invalidate(false);
 
             //paddle movement
-            if ((kPaddle & KPress.left) == KPress.left) paddle.MoveLeft();
-            if ((kPaddle & KPress.right) == KPress.right) paddle.MoveRight();
+            if ((kPaddle & KPress.left) == KPress.left)
+            {
+                paddle.MoveLeft();
+                tempBall.MoveLeft();
+            }
+
+            if ((kPaddle & KPress.right) == KPress.right)
+            {
+                paddle.MoveRight();
+                tempBall.MoveRight();
+            }
             if ((kPaddle & KPress.up) == KPress.up)
             {
                 if (!mainBallSpawned && canShoot)
@@ -194,7 +232,9 @@ namespace ITEC145FinalProject
                     balls.Add(new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35));
                     mainBallSpawned = true;
                     canShoot = false;
+                    tempBallSpawned = false;
                 }
+                
             }
 
             //update the lives pictures & check if the game should end
@@ -203,6 +243,7 @@ namespace ITEC145FinalProject
             if (lives == 1) picLives.Image = l1;
             if (lives == 0)
             {
+                tempBallSpawned = false;
                 picLives.Image = l0;
                 gameTimer.Enabled = false;
                 MessageBox.Show("YOU LOSE!");
@@ -440,6 +481,7 @@ namespace ITEC145FinalProject
             //then you can decrement the lives and reset your ability to shoot
             if (balls.Count == 0 && !canShoot && !anyMainBallsLeft && !isMoving)
             {
+                tempBallSpawned = true;
                 canShoot = true;
                 lives--;
             }

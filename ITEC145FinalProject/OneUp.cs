@@ -8,7 +8,7 @@ namespace ITEC145FinalProject
 {
     public class OneUp
     {
-        private Bitmap img1UP = new Bitmap("1UP.png");
+        private Bitmap img1UP = new Bitmap("../../../resources/1UP.png");
         private PictureBox pic1UP = new PictureBox();
 
         private int _speed;

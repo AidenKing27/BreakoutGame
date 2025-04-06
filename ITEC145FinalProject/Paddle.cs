@@ -17,7 +17,7 @@ namespace ITEC145FinalProject
         private int _height;
         private bool isGrown = false;
         private PictureBox picPaddle = new PictureBox();
-        private Bitmap paddle = new Bitmap("paddle.png");
+        private Bitmap paddle = new Bitmap("../../../resources/paddle.png");
         private CancellationTokenSource? _growCts;
 
 
