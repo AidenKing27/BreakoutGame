@@ -34,7 +34,10 @@
             lblScore = new Label();
             lblLevel = new Label();
             picGameArea = new PictureBox();
+            picClose = new PictureBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)picGameArea).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picClose).BeginInit();
             SuspendLayout();
             // 
             // gameTimer
@@ -81,6 +84,26 @@
             picGameArea.TabStop = false;
             picGameArea.Paint += picGameArea_Paint;
             // 
+            // picClose
+            // 
+            picClose.BackgroundImage = (Image)resources.GetObject("picClose.BackgroundImage");
+            picClose.Location = new Point(682, 0);
+            picClose.Margin = new Padding(0);
+            picClose.Name = "picClose";
+            picClose.Size = new Size(18, 18);
+            picClose.TabIndex = 5;
+            picClose.TabStop = false;
+            picClose.Click += picClose_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(339, 112);
+            label1.Name = "label1";
+            label1.Size = new Size(38, 15);
+            label1.TabIndex = 6;
+            label1.Text = "label1";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -89,17 +112,22 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Center;
             ClientSize = new Size(700, 780);
+            Controls.Add(label1);
+            Controls.Add(picClose);
             Controls.Add(picGameArea);
             Controls.Add(lblLevel);
             Controls.Add(lblScore);
             DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.None;
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Breakout King";
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             ((System.ComponentModel.ISupportInitialize)picGameArea).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picClose).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -108,5 +136,7 @@
         private Label lblScore;
         private Label lblLevel;
         public PictureBox picGameArea;
+        private PictureBox picClose;
+        private Label label1;
     }
 }

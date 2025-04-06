@@ -59,15 +59,5 @@ namespace ITEC145FinalProject.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] PressStart2P {
-            get {
-                object obj = ResourceManager.GetObject("PressStart2P", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

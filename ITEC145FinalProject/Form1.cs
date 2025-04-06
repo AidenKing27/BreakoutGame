@@ -17,43 +17,45 @@ namespace ITEC145FinalProject
         List<Block> blocks = new List<Block>();
         List<OneUp> oneUPs = new List<OneUp>();
         List<TempBall> tempBalls = new List<TempBall>();
+        List<int> highScores = new List<int>();
 
-        //paddle
+        //paddle and the temp ball
         Paddle paddle = new Paddle(250, 600);
         TempBall tempBall;
 
         //blocks
         //-250 -> 60
-        Block block01 = new Block(60, -250, 1, 1);
-        Block block02 = new Block(150, -250, 1, 1);
-        Block block03 = new Block(240, -250, 1, 1);
-        Block block04 = new Block(330, -250, 1, 1);
-        Block block05 = new Block(420, -250, 1, 1);
-        Block block06 = new Block(510, -250, 1, 1);
-        //-205 -> 105
-        Block block07 = new Block(60, -205, 1, 2);
-        Block block08 = new Block(150, -205, 1, 2);
-        Block block09 = new Block(240, -205, 1, 2);
-        Block block10 = new Block(330, -205, 1, 2);
-        Block block11 = new Block(420, -205, 1, 2);
-        Block block12 = new Block(510, -205, 1, 2);
-        //-160 -> 150
-        Block block13 = new Block(60, -160, 1, 3);
-        Block block14 = new Block(150, -160, 1, 3);
-        Block block15 = new Block(240, -160, 1, 3);
-        Block block16 = new Block(330, -160, 1, 3);
-        Block block17 = new Block(420, -160, 1, 3);
-        Block block18 = new Block(510, -160, 1, 3);
-        //-115 -> 195
-        Block block19 = new Block(60, -115, 1, 4);
-        Block block20 = new Block(150, -115, 1, 4);
-        Block block21 = new Block(240, -115, 1, 4);
-        Block block22 = new Block(330, -115, 1, 4);
-        Block block23 = new Block(420, -115, 1, 4);
-        Block block24 = new Block(510, -115, 1, 4);
+        Block block01 = new Block(60, -250, 1);
+        Block block02 = new Block(150, -250, 1);
+        Block block03 = new Block(240, -250, 1);
+        Block block04 = new Block(330, -250, 1);
+        Block block05 = new Block(420, -250, 1);
+        Block block06 = new Block(510, -250, 1);
+        ////-205 -> 105
+        //Block block07 = new Block(60, -205, 2);
+        //Block block08 = new Block(150, -205, 2);
+        //Block block09 = new Block(240, -205, 2);
+        //Block block10 = new Block(330, -205, 2);
+        //Block block11 = new Block(420, -205, 2);
+        //Block block12 = new Block(510, -205, 2);
+        ////-160 -> 150
+        //Block block13 = new Block(60, -160, 3);
+        //Block block14 = new Block(150, -160, 3);
+        //Block block15 = new Block(240, -160, 3);
+        //Block block16 = new Block(330, -160, 3);
+        //Block block17 = new Block(420, -160, 3);
+        //Block block18 = new Block(510, -160, 3);
+        ////-115 -> 195
+        //Block block19 = new Block(60, -115, 4);
+        //Block block20 = new Block(150, -115, 4);
+        //Block block21 = new Block(240, -115, 4);
+        //Block block22 = new Block(330, -115, 4);
+        //Block block23 = new Block(420, -115, 4);
+        //Block block24 = new Block(510, -115, 4);
 
         //field variables
         public static int score;
+        public static int highScore;
         int lives = 3;
         int level;
         bool hasCollided = false;
@@ -67,18 +69,22 @@ namespace ITEC145FinalProject
         //GameArea picturebox
         public PictureBox picLives = new PictureBox();
 
+        //lives images
         Bitmap l0 = new Bitmap("../../../resources/lives0.png");
         Bitmap l1 = new Bitmap("../../../resources/lives1.png");
         Bitmap l2 = new Bitmap("../../../resources/lives2.png");
         Bitmap l3 = new Bitmap("../../../resources/lives3.png");
 
-
         //font object
-        PrivateFontCollection pfcPressStart2P = new PrivateFontCollection(); //PressStart2P
+        public static PrivateFontCollection pfcPressStart2P = new PrivateFontCollection();
 
         public Form1()
         {
             InitializeComponent();
+            ReadHighScore();
+            InitPressStart2PFont();
+            lblScore.Font = new Font(pfcPressStart2P.Families[0], lblScore.Font.Size);
+            lblLevel.Font = new Font(pfcPressStart2P.Families[0], lblLevel.Font.Size);
 
             tempBall = new TempBall(paddle.Left + paddle.Width / 2 - 15, paddle.Top - paddle.Height - 15);
             tempBalls.Add(tempBall);
@@ -87,13 +93,7 @@ namespace ITEC145FinalProject
             picGameArea.BackColor = Color.FromArgb(38, 38, 38);
 
             //fixed form size
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-
-            //import and set font
-            InitPressStart2PFont();
-            lblScore.Font = new Font(pfcPressStart2P.Families[0], lblScore.Font.Size);
-            lblLevel.Font = new Font(pfcPressStart2P.Families[0], lblLevel.Font.Size);
 
             //link the classes to Form1
             Ball.mainForm = this;
@@ -119,26 +119,26 @@ namespace ITEC145FinalProject
             blocks.Add(block05);
             blocks.Add(block06);
 
-            blocks.Add(block07);
-            blocks.Add(block08);
-            blocks.Add(block09);
-            blocks.Add(block10);
-            blocks.Add(block11);
-            blocks.Add(block12);
+            //blocks.Add(block07);
+            //blocks.Add(block08);
+            //blocks.Add(block09);
+            //blocks.Add(block10);
+            //blocks.Add(block11);
+            //blocks.Add(block12);
 
-            blocks.Add(block13);
-            blocks.Add(block14);
-            blocks.Add(block15);
-            blocks.Add(block16);
-            blocks.Add(block17);
-            blocks.Add(block18);
+            //blocks.Add(block13);
+            //blocks.Add(block14);
+            //blocks.Add(block15);
+            //blocks.Add(block16);
+            //blocks.Add(block17);
+            //blocks.Add(block18);
 
-            blocks.Add(block19);
-            blocks.Add(block20);
-            blocks.Add(block21);
-            blocks.Add(block22);
-            blocks.Add(block23);
-            blocks.Add(block24);
+            //blocks.Add(block19);
+            //blocks.Add(block20);
+            //blocks.Add(block21);
+            //blocks.Add(block22);
+            //blocks.Add(block23);
+            //blocks.Add(block24);
         }
 
 
@@ -166,65 +166,55 @@ namespace ITEC145FinalProject
                 oneUp.Fall();
                 if (CollisionPaddle1UP(oneUp, paddle))
                 {
-                    lives++;
                     oneUp.IsUsed = true;
+                    //only give a 1UP if youre under 3 lives
+                    if (lives < 3)
+                    {
+                        lives++;
+                    }
                 }
             }
-
         }
-
-        ////found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
-        //void InitPressStart2PFont2()
-        //{
-        //    //get length of file in bytes and create an array of the byte data
-        //    int fontLength = Properties.Resources.PressStart2P.Length;
-        //    byte[] fontData = Properties.Resources.PressStart2P;
-
-        //    //does something with memory allocation
-        //    System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
-        //    Marshal.Copy(fontData, 0, data, fontLength);
-        //    pfcPressStart2P.AddMemoryFont(data, fontLength);
-        //}
 
         //found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
         //used chatgpt to rewrite the code to not use the resources folder
-        void InitPressStart2PFont()
+        public void InitPressStart2PFont()
         {
-            //get length of file in bytes and create an array of the byte data
+            //find the file path of the .ttf file then store its byte data into a byte array
             string fontPath = Path.Combine(Application.StartupPath, "Resources", "PressStart2P.ttf");
             byte[] fontData = File.ReadAllBytes(fontPath);
 
-            //does something with memory allocation
+            //does something with memory allocation by using the length of the data in bytes
             IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
             Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
             pfcPressStart2P.AddMemoryFont(fontPtr, fontData.Length);
         }
 
 
-        //private void ReadHighScore()
-        //{
-        //    //Open a StreamReader for dynamicScores.txt and add every number to a list, then close it
-        //    StreamReader scoreInput = new StreamReader("../../../resources/highscores.txt");
-        //    while (scoreInput.EndOfStream == false)
-        //    {
-        //        string s = scoreInput.ReadLine();
-        //        dynamicScores.Add(double.Parse(s));
-        //    }
-        //    scoreInput.Close();
-        //    //foreach item in the list, check which number is the highest and set the variable
-        //    foreach (double x in dynamicScores)
-        //    {
-        //        if (x > dynamicHighScore)
-        //        {
-        //            dynamicHighScore = x;
-        //        }
-        //    }
-        //    //Display High Score
-        //    lblHighScore.Text = "High Score: " + dynamicHighScore.ToString("n2");
-        //}
+        private void ReadHighScore()
+        {
+            //Open a StreamReader for highscores.txt and add every number to a list, then close it
+            StreamReader scoreInput = new StreamReader("../../../resources/scores.txt");
+            while (scoreInput.EndOfStream == false)
+            {
+                string s = scoreInput.ReadLine();
+                highScores.Add(int.Parse(s));
+            }
+            scoreInput.Close();
+            //foreach item in the list, check which number is the highest and set the variable
+            foreach (int x in highScores)
+            {
+                if (x > highScore)
+                {
+                    highScore = x;
+                }
+            }
+        }
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            label1.Text = lives.ToString();
+
             //steve said this will force the Paint event to fire
             picGameArea.Invalidate(false);
 
@@ -249,7 +239,7 @@ namespace ITEC145FinalProject
                     canShoot = false;
                     tempBallSpawned = false;
                 }
-                
+
             }
 
             //update the lives pictures & check if the game should end
@@ -261,8 +251,19 @@ namespace ITEC145FinalProject
                 tempBallSpawned = false;
                 picLives.Image = l0;
                 gameTimer.Enabled = false;
-                MessageBox.Show("YOU LOSE!");
-                Application.Restart();
+
+                StreamWriter scoreOutput;
+                scoreOutput = File.AppendText("../../../resources/scores.txt");
+                scoreOutput.WriteLine(score);
+                scoreOutput.Close();
+                ReadHighScore();
+
+
+                //MessageBox.Show("YOU LOSE!");
+
+                Form statsPage = new Stats(this);
+                statsPage.Show();
+                //Application.Restart();
             }
 
             //update the score
@@ -312,48 +313,43 @@ namespace ITEC145FinalProject
                 blocks.Add(block05);
                 blocks.Add(block06);
                 //red
-                blocks.Add(block07);
-                blocks.Add(block08);
-                blocks.Add(block09);
-                blocks.Add(block10);
-                blocks.Add(block11);
-                blocks.Add(block12);
-                //yellow
-                blocks.Add(block13);
-                blocks.Add(block14);
-                blocks.Add(block15);
-                blocks.Add(block16);
-                blocks.Add(block17);
-                blocks.Add(block18);
-                //green
-                blocks.Add(block19);
-                blocks.Add(block20);
-                blocks.Add(block21);
-                blocks.Add(block22);
-                blocks.Add(block23);
-                blocks.Add(block24);
+                //blocks.Add(block07);
+                //blocks.Add(block08);
+                //blocks.Add(block09);
+                //blocks.Add(block10);
+                //blocks.Add(block11);
+                //blocks.Add(block12);
+                ////yellow
+                //blocks.Add(block13);
+                //blocks.Add(block14);
+                //blocks.Add(block15);
+                //blocks.Add(block16);
+                //blocks.Add(block17);
+                //blocks.Add(block18);
+                ////green
+                //blocks.Add(block19);
+                //blocks.Add(block20);
+                //blocks.Add(block21);
+                //blocks.Add(block22);
+                //blocks.Add(block23);
+                //blocks.Add(block24);
 
                 //regenerate property
                 foreach (Block block in blocks)
                 {
+                    //regenerate properties
                     block.SetBlocks(block.Colour);
-                }
 
-                //reset the moving property
-                isMoving = true;
+                    //reset the moving property
+                    isMoving = true;
 
-                //increase and display the level
-                level += 1;
-                lblLevel.Text = $"LVL:{level:d2}";
+                    //increase and display the level
+                    level += 1;
+                    lblLevel.Text = $"LVL:{level:d2}";
 
-                //health and position resets
-                foreach (Block block in blocks)
-                {
+                    //position resets
                     block.Moving = true;
                     block.Speed = 5;
-                    //reset the health
-                    block.Health = 1;
-                    //reset the Y position based on its colour
                     block.ResetLocation();
                 }
             }
@@ -418,12 +414,11 @@ namespace ITEC145FinalProject
                             }
                             //is it a grower block
                             if (block.IsGrower) paddle.Grow();
-                            //is it a life block
+                            //is it a life block (spawn 1UP)
                             if (block.Is1UP) oneUPs.Add(new OneUp(block.Left + block.Width / 2, block.Top + block.Height));
                             //is it a strong block
                             if (block.IsStrong) block.Break();
                         }
-
                     }
                     //check if the ball has collided on either the left or the right of the blocks
                     if (LeftRightCollisionBlock(ball, block))
@@ -460,7 +455,7 @@ namespace ITEC145FinalProject
                             }
                             //is it a grower block
                             if (block.IsGrower) paddle.Grow();
-                            //is it a life block
+                            //is it a life block (spawn 1UP)
                             if (block.Is1UP) oneUPs.Add(new OneUp(block.Left + block.Width / 2, block.Top + block.Height));
                             //is it a strong block
                             if (block.IsStrong) block.Break();
@@ -494,6 +489,7 @@ namespace ITEC145FinalProject
             //and if there is no main balls left,
             //and if the blocks are not moving
             //then you can decrement the lives and reset your ability to shoot
+            //(also respawns the tempBall to visualize your ability to shoot again)
             if (balls.Count == 0 && !canShoot && !anyMainBallsLeft && !isMoving)
             {
                 tempBallSpawned = true;
@@ -611,6 +607,11 @@ namespace ITEC145FinalProject
                     kPaddle &= ~KPress.up;
                     break;
             }
+        }
+
+        private void picClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

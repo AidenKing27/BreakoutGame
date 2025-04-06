@@ -128,14 +128,14 @@ namespace ITEC145FinalProject
         }
 
 
-        public Block(int x, int y, int health, int blockColour)
+        public Block(int x, int y, int blockColour)
         {
             _width = 80;
             _height = 35;
             _x = x;
             _y = y;
             _speed = 5;
-            _health = health;
+            _health = 1;
             _colour = blockColour;
             _isNormal = true;
 
@@ -158,9 +158,10 @@ namespace ITEC145FinalProject
             _is1UP = false;
             _isStrong = false;
             _isNormal = false;
+            _health = 1;
 
             //set images and properties
-            int rand = _rnd.Next(26);
+            int rand = _rnd.Next(7);
             switch (rand)
             {
                 case 1:
