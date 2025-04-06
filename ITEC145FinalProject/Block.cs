@@ -137,10 +137,8 @@ namespace ITEC145FinalProject
             _speed = 5;
             _health = 1;
             _colour = blockColour;
-            _isNormal = true;
 
             SetBlocks(blockColour);
-
         }
 
         public void SetBlocks(int blockColour)
@@ -161,7 +159,7 @@ namespace ITEC145FinalProject
             _health = 1;
 
             //set images and properties
-            int rand = _rnd.Next(7);
+            int rand = _rnd.Next(26);
             switch (rand)
             {
                 case 1:
