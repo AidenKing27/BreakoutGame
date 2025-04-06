@@ -19,7 +19,7 @@ namespace ITEC145FinalProject
         List<TempBall> tempBalls = new List<TempBall>();
         List<int> highScores = new List<int>();
 
-        //paddle and the temp ball
+        //paddle and the temp ball (the one that sits on the paddle)
         Paddle paddle = new Paddle(250, 600);
         TempBall tempBall;
 
@@ -120,26 +120,26 @@ namespace ITEC145FinalProject
             blocks.Add(block05);
             blocks.Add(block06);
 
-            //blocks.Add(block07);
-            //blocks.Add(block08);
-            //blocks.Add(block09);
-            //blocks.Add(block10);
-            //blocks.Add(block11);
-            //blocks.Add(block12);
+            blocks.Add(block07);
+            blocks.Add(block08);
+            blocks.Add(block09);
+            blocks.Add(block10);
+            blocks.Add(block11);
+            blocks.Add(block12);
 
-            //blocks.Add(block13);
-            //blocks.Add(block14);
-            //blocks.Add(block15);
-            //blocks.Add(block16);
-            //blocks.Add(block17);
-            //blocks.Add(block18);
+            blocks.Add(block13);
+            blocks.Add(block14);
+            blocks.Add(block15);
+            blocks.Add(block16);
+            blocks.Add(block17);
+            blocks.Add(block18);
 
-            //blocks.Add(block19);
-            //blocks.Add(block20);
-            //blocks.Add(block21);
-            //blocks.Add(block22);
-            //blocks.Add(block23);
-            //blocks.Add(block24);
+            blocks.Add(block19);
+            blocks.Add(block20);
+            blocks.Add(block21);
+            blocks.Add(block22);
+            blocks.Add(block23);
+            blocks.Add(block24);
         }
 
 
@@ -176,8 +176,6 @@ namespace ITEC145FinalProject
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            label1.Text = lives.ToString();
-
             //steve said this will force the Paint event to fire
             picGameArea.Invalidate(false);
 
@@ -187,7 +185,6 @@ namespace ITEC145FinalProject
                 paddle.MoveLeft();
                 tempBall.MoveLeft();
             }
-
             if ((kPaddle & KPress.right) == KPress.right)
             {
                 paddle.MoveRight();
@@ -197,7 +194,7 @@ namespace ITEC145FinalProject
             {
                 if (!mainBallSpawned && canShoot)
                 {
-                    balls.Add(new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35));
+                    balls.Add(new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35, 0));
                     mainBallSpawned = true;
                     canShoot = false;
                     tempBallSpawned = false;
@@ -323,6 +320,9 @@ namespace ITEC145FinalProject
                 //check if the ball has collided on either the top or bottom of the paddle
                 if (CollisionPaddleBall(ball, paddle))
                 {
+                    //ensure ball always stays on top of paddle if collision
+                    ball.Y = paddle.Top - ball.Height;
+
                     //calculates a slice value from 0 to 1 based on the position between very top to very bottom of paddle
                     double slice = (ball.Left + (ball.Width / 2)) - paddle.Left;
                     slice /= paddle.Width;
@@ -579,7 +579,7 @@ namespace ITEC145FinalProject
         }
 
         //found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
-        //used chatgpt to rewrite the code to not use the resources folder
+        //used chatgpt to rewrite the code to not use the resources.resx file
         public void InitPressStart2PFont()
         {
             //find the file path of the .ttf file then store its byte data into a byte array

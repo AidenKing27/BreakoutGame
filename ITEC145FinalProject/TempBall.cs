@@ -11,7 +11,6 @@ namespace ITEC145FinalProject
         private Bitmap tempBall = new Bitmap("../../../resources/ball0.png");
         private PictureBox picTempBall = new PictureBox();
 
-
         private int _x;
         private int _y;
         private int _width;

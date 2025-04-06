@@ -35,7 +35,16 @@ namespace ITEC145FinalProject
         private const int XBASESPEED = 30;
 
 
-
+        public int X
+        {
+            get { return _x; }
+            set { _x = value; }
+        }
+        public int Y
+        {
+            get { return _y; }
+            set { _y = value; }
+        }
         public int Left
         {
             get { return _x; }
@@ -78,43 +87,44 @@ namespace ITEC145FinalProject
             get { return _isSpecial; }
         }
 
-        public Ball(int x, int y)
-        {
-            _xSpeed = _rnd.Next(-10, 11);
-            if (_xSpeed == 0)
-                _xSpeed = _rnd.Next(0, 2) * 2 - 1;
-            _ySpeed = -10;
-            _width = 30;
-            _height = 30;
-            _x = x;
-            _y = y;
-            _isSpecial = false;
-
-            picBall.Image = ball0;
-
-            _ballTimer = new System.Windows.Forms.Timer();
-            _ballTimer.Tick += _ballTimer_Tick;
-            _ballTimer.Enabled = true;
-            _ballTimer.Interval = 20;
-        }
-
         public Ball(int x, int y, int ballColour)
         {
-            _xSpeed = _rnd.Next(-3, 4);
+            //set basic properties
+            _xSpeed = _rnd.Next(-4, 5);
             _ySpeed = 10;
-
             _width = 30;
             _height = 30;
             _x = x;
             _y = y;
             _isSpecial = true;
 
-            picBall.Image = ball0;
-            if (ballColour == 1) picBall.Image = ball1;
-            if (ballColour == 2) picBall.Image = ball2;
-            if (ballColour == 3) picBall.Image = ball3;
-            if (ballColour == 4) picBall.Image = ball4;
+            //change certian properties based on ballColour
+            //ex. mainBall has different speeds/properties
+            switch (ballColour)
+            {
+                case 0:
+                    picBall.Image = ball0;
+                    _isSpecial = false;
+                    _xSpeed = _rnd.Next(-10, 11);
+                    if (_xSpeed == 0)
+                        _xSpeed = _rnd.Next(0, 2) * 2 - 1; //sets either -1 or 1
+                    _ySpeed = -10;
+                    break;
+                case 1:
+                    picBall.Image = ball1;
+                    break;
+                case 2:
+                    picBall.Image = ball2;
+                    break;
+                case 3:
+                    picBall.Image = ball3;
+                    break;
+                case 4:
+                    picBall.Image = ball4;
+                    break;
+            }
 
+            //invidual timer for the ball to avoid invalidate firing too many times
             _ballTimer = new System.Windows.Forms.Timer();
             _ballTimer.Tick += _ballTimer_Tick;
             _ballTimer.Enabled = true;
@@ -123,18 +133,28 @@ namespace ITEC145FinalProject
 
         private void _ballTimer_Tick(object? sender, EventArgs e)
         {
+            //as timer ticks, move the ball at the X and Y speeds
             _x += _xSpeed;
             _y += _ySpeed;
 
-            //left wall
+            //left wall (flip xSpeed and ensure it doesnt get stuck in the wall)
             if (_x <= mainForm.picGameArea.Left - 25)
+            {
                 _xSpeed *= -1;
-            //right wall
-            if (_x + _width > mainForm.picGameArea.Width)
+                _x = mainForm.picGameArea.Left - 25;
+            }
+            //right wall (flip xSpeed and ensure it doesnt get stuck in the wall)
+            if (_x + _width >= mainForm.picGameArea.Width)
+            { 
                 _xSpeed *= -1;
-            //top wall
+                _x = mainForm.picGameArea.Width - _width;
+            }
+            //top wall (flip ySpeed and ensure it doesnt get stuck in the wall)
             if (_y <= mainForm.picGameArea.Top - 105)
+            {
                 _ySpeed *= -1;
+                _y = mainForm.picGameArea.Top - 105;
+            }
         }
 
 
