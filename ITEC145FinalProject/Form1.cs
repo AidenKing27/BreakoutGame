@@ -81,7 +81,11 @@ namespace ITEC145FinalProject
         public Form1()
         {
             InitializeComponent();
+
+            //check high score
             ReadHighScore();
+
+            //font stuff
             InitPressStart2PFont();
             lblScore.Font = new Font(pfcPressStart2P.Families[0], lblScore.Font.Size);
             lblLevel.Font = new Font(pfcPressStart2P.Families[0], lblLevel.Font.Size);
@@ -120,26 +124,26 @@ namespace ITEC145FinalProject
             blocks.Add(block05);
             blocks.Add(block06);
 
-            //blocks.Add(block07);
-            //blocks.Add(block08);
-            //blocks.Add(block09);
-            //blocks.Add(block10);
-            //blocks.Add(block11);
-            //blocks.Add(block12);
+            blocks.Add(block07);
+            blocks.Add(block08);
+            blocks.Add(block09);
+            blocks.Add(block10);
+            blocks.Add(block11);
+            blocks.Add(block12);
 
-            //blocks.Add(block13);
-            //blocks.Add(block14);
-            //blocks.Add(block15);
-            //blocks.Add(block16);
-            //blocks.Add(block17);
-            //blocks.Add(block18);
+            blocks.Add(block13);
+            blocks.Add(block14);
+            blocks.Add(block15);
+            blocks.Add(block16);
+            blocks.Add(block17);
+            blocks.Add(block18);
 
-            //blocks.Add(block19);
-            //blocks.Add(block20);
-            //blocks.Add(block21);
-            //blocks.Add(block22);
-            //blocks.Add(block23);
-            //blocks.Add(block24);
+            blocks.Add(block19);
+            blocks.Add(block20);
+            blocks.Add(block21);
+            blocks.Add(block22);
+            blocks.Add(block23);
+            blocks.Add(block24);
         }
 
 
@@ -176,8 +180,6 @@ namespace ITEC145FinalProject
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            label1.Text = canShoot.ToString();
-
             //steve said this will force the Paint event to fire
             picGameArea.Invalidate(false);
 
@@ -194,6 +196,7 @@ namespace ITEC145FinalProject
             }
             if ((kPaddle & KPress.up) == KPress.up)
             {
+                //ability to spawn the ball
                 if (!mainBallSpawned && canShoot)
                 {
                     balls.Add(new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35, 0));

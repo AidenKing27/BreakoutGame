@@ -8,6 +8,7 @@ namespace ITEC145FinalProject
 {
     public class OneUp
     {
+        //fields
         private Bitmap img1UP = new Bitmap("../../../resources/1UP.png");
         private PictureBox pic1UP = new PictureBox();
 
@@ -18,16 +19,7 @@ namespace ITEC145FinalProject
         private int _y;
         private bool _isUsed = false;
 
-        public OneUp(int x, int y)
-        {
-            _x = x;
-            _y = y;
-            _speed = 5;
-            _width = 30;
-            _height = 30;
-            pic1UP.Image = img1UP;
-        }
-
+        //properties
         public int Left
         {
             get { return _x; }
@@ -50,14 +42,26 @@ namespace ITEC145FinalProject
             set { _isUsed = value; }
         }
 
+        //constructor
+        public OneUp(int x, int y)
+        {
+            _x = x;
+            _y = y;
+            _speed = 5;
+            _width = 30;
+            _height = 30;
+            pic1UP.Image = img1UP;
+        }
+
+        //methods
+        public void Fall()
+        {
+            _y += _speed;
+        }
         public void Draw(Graphics gr)
         {
             gr.DrawImage(pic1UP.Image, _x, _y, _width, _height);
         }
 
-        public void Fall()
-        {
-            _y += _speed;
-        }
     }
 }

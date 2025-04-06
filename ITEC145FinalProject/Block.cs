@@ -10,6 +10,7 @@ namespace ITEC145FinalProject
 {
     public class Block
     {
+        //fields
         private Bitmap b1 = new Bitmap("../../../resources/block1.png");
         private Bitmap b1s = new Bitmap("../../../resources/block1spawn.png");
         private Bitmap b1g = new Bitmap("../../../resources/block1grow.png");
@@ -58,6 +59,7 @@ namespace ITEC145FinalProject
         private bool _isStrong;
         private bool _isNormal;
 
+        //properties
         public int Left
         {
             get { return _x; }
@@ -127,7 +129,7 @@ namespace ITEC145FinalProject
             set { _isNormal = value; }
         }
 
-
+        //constructor
         public Block(int x, int y, int blockColour)
         {
             _width = 80;
@@ -141,6 +143,7 @@ namespace ITEC145FinalProject
             SetBlocks(blockColour);
         }
 
+        //methods
         public void SetBlocks(int blockColour)
         {
             //image arrays
@@ -185,7 +188,6 @@ namespace ITEC145FinalProject
                     break;
             }
         }
-
         public void TakeDamage()
         {
             TimeSpan ts = DateTime.Now - dt;
@@ -196,12 +198,10 @@ namespace ITEC145FinalProject
                 Form1.score += 50;
             }
         }
-
         public void MoveDown()
         {
             _y += _speed;
         }
-
         public void StopMoving()
         {
             _speed = 0;
@@ -213,7 +213,6 @@ namespace ITEC145FinalProject
             if (_colour == 3) _y = -160;
             if (_colour == 4) _y = -115;
         }
-
         public void Break()
         {
             if (_colour == 1) picBlock.Image = b1w;
@@ -221,7 +220,6 @@ namespace ITEC145FinalProject
             if (_colour == 3) picBlock.Image = b3w;
             if (_colour == 4) picBlock.Image = b4w;
         }
-
         public void Draw(Graphics gr)
         {
             gr.DrawImage(picBlock.Image, _x, _y, _width, _height);

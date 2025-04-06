@@ -8,6 +8,7 @@ namespace ITEC145FinalProject
 {
     public class TempBall
     {
+        //fields
         private Bitmap tempBall = new Bitmap("../../../resources/ball0.png");
         private PictureBox picTempBall = new PictureBox();
 
@@ -17,7 +18,7 @@ namespace ITEC145FinalProject
         private int _height;
         private bool _isAlive = true;
 
-
+        //properties
         public int X
         {
             get { return _x; }
@@ -58,7 +59,7 @@ namespace ITEC145FinalProject
             set { _isAlive = value; }
         }
 
-
+        //constructor
         public TempBall(int x, int y)
         {
             _width = 30;
@@ -69,6 +70,7 @@ namespace ITEC145FinalProject
             picTempBall.Image = tempBall;
         }
 
+        //methods
         public void MoveLeft()
         {
             _x -= 15;
@@ -77,7 +79,6 @@ namespace ITEC145FinalProject
         {
             _x += 15;
         }
-
         public void Draw(Graphics gr)
         {
             gr.DrawImage(picTempBall.Image, _x, _y, _width, _height);

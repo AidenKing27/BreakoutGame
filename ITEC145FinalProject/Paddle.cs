@@ -9,6 +9,7 @@ namespace ITEC145FinalProject
 {
     public class Paddle
     {
+        //fields
         static public Form1 mainForm;
 
         private int _x;
@@ -20,7 +21,7 @@ namespace ITEC145FinalProject
         private Bitmap paddle = new Bitmap("../../../resources/paddle.png");
         private CancellationTokenSource? _growCts;
 
-
+        //properties
         public int Left
         {
             get { return _x; }
@@ -46,6 +47,7 @@ namespace ITEC145FinalProject
             get { return _height; }
         }
 
+        //constructor
         public Paddle(int x, int y)
         {
             _width = 150;
@@ -55,6 +57,7 @@ namespace ITEC145FinalProject
             picPaddle.Image = paddle; 
         }
 
+        //methods
         public void MoveLeft()
         {
             _x -= 15;
@@ -63,7 +66,6 @@ namespace ITEC145FinalProject
         {
             _x += 15;
         }
-
         public async void Grow()
         {
             //canceles any prior tokens, then creates a new cancellation token source
@@ -125,7 +127,6 @@ namespace ITEC145FinalProject
             }
             catch (TaskCanceledException) { /*swallow*/ }
         }
-
         public void Draw(Graphics gr)
         {
             //left side

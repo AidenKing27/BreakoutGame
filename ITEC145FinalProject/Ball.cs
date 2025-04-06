@@ -11,6 +11,7 @@ namespace ITEC145FinalProject
 {
     public class Ball
     {
+        //fields
         static public Form1 mainForm;
 
         private Bitmap ball0 = new Bitmap("../../../resources/ball0.png");
@@ -34,7 +35,7 @@ namespace ITEC145FinalProject
         private bool _isSpecial;
         private const int XBASESPEED = 30;
 
-
+        //properties
         public int X
         {
             get { return _x; }
@@ -87,6 +88,7 @@ namespace ITEC145FinalProject
             get { return _isSpecial; }
         }
 
+        //constructor
         public Ball(int x, int y, int ballColour)
         {
             //set basic properties
@@ -131,6 +133,7 @@ namespace ITEC145FinalProject
             _ballTimer.Interval = 20;
         }
 
+        //timer + movement
         private void _ballTimer_Tick(object? sender, EventArgs e)
         {
             //as timer ticks, move the ball at the X and Y speeds
@@ -157,23 +160,20 @@ namespace ITEC145FinalProject
             }
         }
 
-
+        //methods
         public void ChangeDirectionY()
         {
             _ySpeed *= -1;
         }
-
         public void ChangeDirectionX()
         {
             _xSpeed *= -1;
         }
-
         public void ChangeDirectionBySlice(double slice)
         {
             _ySpeed *= -1;
             _xSpeed = Convert.ToInt32(XBASESPEED * slice);
         }
-
         public void Draw(Graphics gr)
         {
             gr.DrawImage(picBall.Image, _x, _y, _width, _height);
