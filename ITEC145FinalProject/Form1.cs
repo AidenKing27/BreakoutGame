@@ -173,18 +173,33 @@ namespace ITEC145FinalProject
 
         }
 
+        ////found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
+        //void InitPressStart2PFont2()
+        //{
+        //    //get length of file in bytes and create an array of the byte data
+        //    int fontLength = Properties.Resources.PressStart2P.Length;
+        //    byte[] fontData = Properties.Resources.PressStart2P;
+
+        //    //does something with memory allocation
+        //    System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+        //    Marshal.Copy(fontData, 0, data, fontLength);
+        //    pfcPressStart2P.AddMemoryFont(data, fontLength);
+        //}
+
         //found how to import fonts from: stackoverflow.com/questions/1297264/using-custom-fonts-on-a-label-on-winforms
+        //used chatgpt to rewrite the code to not use the resources folder
         void InitPressStart2PFont()
         {
             //get length of file in bytes and create an array of the byte data
-            int fontLength = Properties.Resources.PressStart2P.Length;
-            byte[] fontData = Properties.Resources.PressStart2P;
+            string fontPath = Path.Combine(Application.StartupPath, "Resources", "PressStart2P.ttf");
+            byte[] fontData = File.ReadAllBytes(fontPath);
 
             //does something with memory allocation
-            System.IntPtr data = Marshal.AllocCoTaskMem(fontLength);
-            Marshal.Copy(fontData, 0, data, fontLength);
-            pfcPressStart2P.AddMemoryFont(data, fontLength);
+            IntPtr fontPtr = Marshal.AllocCoTaskMem(fontData.Length);
+            Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
+            pfcPressStart2P.AddMemoryFont(fontPtr, fontData.Length);
         }
+
 
         //private void ReadHighScore()
         //{
