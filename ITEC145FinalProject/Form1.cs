@@ -63,7 +63,7 @@ namespace ITEC145FinalProject
         bool canShoot = false;
         bool spcBallSpawned = false;
         bool isMoving = true;
-        bool tempBallSpawned = false;
+        bool anyMainBallsLeft;
         DateTime dt = DateTime.Now;
 
         //GameArea picturebox
@@ -120,26 +120,26 @@ namespace ITEC145FinalProject
             blocks.Add(block05);
             blocks.Add(block06);
 
-            blocks.Add(block07);
-            blocks.Add(block08);
-            blocks.Add(block09);
-            blocks.Add(block10);
-            blocks.Add(block11);
-            blocks.Add(block12);
+            //blocks.Add(block07);
+            //blocks.Add(block08);
+            //blocks.Add(block09);
+            //blocks.Add(block10);
+            //blocks.Add(block11);
+            //blocks.Add(block12);
 
-            blocks.Add(block13);
-            blocks.Add(block14);
-            blocks.Add(block15);
-            blocks.Add(block16);
-            blocks.Add(block17);
-            blocks.Add(block18);
+            //blocks.Add(block13);
+            //blocks.Add(block14);
+            //blocks.Add(block15);
+            //blocks.Add(block16);
+            //blocks.Add(block17);
+            //blocks.Add(block18);
 
-            blocks.Add(block19);
-            blocks.Add(block20);
-            blocks.Add(block21);
-            blocks.Add(block22);
-            blocks.Add(block23);
-            blocks.Add(block24);
+            //blocks.Add(block19);
+            //blocks.Add(block20);
+            //blocks.Add(block21);
+            //blocks.Add(block22);
+            //blocks.Add(block23);
+            //blocks.Add(block24);
         }
 
 
@@ -148,7 +148,7 @@ namespace ITEC145FinalProject
             //draw the paddle
             paddle.Draw(e.Graphics);
 
-            if (tempBallSpawned)
+            if (!mainBallSpawned && canShoot)
                 tempBall.Draw(e.Graphics);
 
             //draw the blocks
@@ -176,6 +176,8 @@ namespace ITEC145FinalProject
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
+            label1.Text = canShoot.ToString();
+
             //steve said this will force the Paint event to fire
             picGameArea.Invalidate(false);
 
@@ -197,7 +199,6 @@ namespace ITEC145FinalProject
                     balls.Add(new Ball(paddle.Left + paddle.Width / 2 - 15, paddle.Top - 35, 0));
                     mainBallSpawned = true;
                     canShoot = false;
-                    tempBallSpawned = false;
                 }
             }
 
@@ -207,7 +208,6 @@ namespace ITEC145FinalProject
             if (lives == 1) picLives.Image = l1;
             if (lives == 0)
             {
-                tempBallSpawned = false;
                 picLives.Image = l0;
                 gameTimer.Enabled = false;
 
@@ -219,7 +219,6 @@ namespace ITEC145FinalProject
 
                 Form statsPage = new Stats(this);
                 statsPage.Show();
-                //Application.Restart();
             }
 
             //update the score
@@ -246,7 +245,6 @@ namespace ITEC145FinalProject
                     {
                         block.StopMoving();
                         block.Moving = false;
-                        tempBallSpawned = true;
 
                         if (block.Colour == 1)
                         {
@@ -442,7 +440,7 @@ namespace ITEC145FinalProject
             balls.RemoveAll(ball => !ball.IsAlive);
 
             //if no main (non-special) balls exist after cleanup
-            bool anyMainBallsLeft = balls.Any(ball => !ball.IsSpecial);
+            anyMainBallsLeft = balls.Any(ball => !ball.IsSpecial);
 
             //if the ball list has no entries,
             //and you currently cannot shoot,
@@ -454,7 +452,6 @@ namespace ITEC145FinalProject
             {
                 tempBall.X = paddle.Left + paddle.Width / 2 - 15;
                 tempBall.Y = paddle.Top - paddle.Height - 15;
-                tempBallSpawned = true;
                 canShoot = true;
                 lives--;
             }

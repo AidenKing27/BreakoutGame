@@ -35,6 +35,7 @@
             lblLevel = new Label();
             picGameArea = new PictureBox();
             picClose = new PictureBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)picGameArea).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picClose).BeginInit();
             SuspendLayout();
@@ -94,6 +95,15 @@
             picClose.TabStop = false;
             picClose.Click += picClose_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(305, 106);
+            label1.Name = "label1";
+            label1.Size = new Size(38, 15);
+            label1.TabIndex = 6;
+            label1.Text = "label1";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -102,6 +112,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Center;
             ClientSize = new Size(700, 780);
+            Controls.Add(label1);
             Controls.Add(picClose);
             Controls.Add(picGameArea);
             Controls.Add(lblLevel);
@@ -116,6 +127,7 @@
             ((System.ComponentModel.ISupportInitialize)picGameArea).EndInit();
             ((System.ComponentModel.ISupportInitialize)picClose).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -125,5 +137,6 @@
         private Label lblLevel;
         public PictureBox picGameArea;
         private PictureBox picClose;
+        private Label label1;
     }
 }
