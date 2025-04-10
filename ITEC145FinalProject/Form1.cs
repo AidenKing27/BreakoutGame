@@ -103,6 +103,7 @@ namespace ITEC145FinalProject
             //link the classes to Form1
             Ball.mainForm = this;
             Paddle.mainForm = this;
+            TempBall.mainForm = this;
 
             //Lives picturebox (transparent)
             picLives.Location = new Point(25, 25);
@@ -182,6 +183,9 @@ namespace ITEC145FinalProject
         {
             //steve said this will force the Paint event to fire
             picGameArea.Invalidate(false);
+
+            tempBall.X = paddle.Left + paddle.Width / 2 - 15;
+            tempBall.Y = paddle.Top - paddle.Height - 15;
 
             //paddle movement
             if ((kPaddle & KPress.left) == KPress.left)

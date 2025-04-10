@@ -9,6 +9,8 @@ namespace ITEC145FinalProject
     public class TempBall
     {
         //fields
+        static public Form1 mainForm;
+
         private Bitmap tempBall = new Bitmap("../../../resources/ball0.png");
         private PictureBox picTempBall = new PictureBox();
 
