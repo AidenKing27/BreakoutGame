@@ -82,6 +82,8 @@ namespace ITEC145FinalProject
         {
             InitializeComponent();
 
+            
+
             //check high score
             ReadHighScore();
 
@@ -145,6 +147,8 @@ namespace ITEC145FinalProject
             blocks.Add(block22);
             blocks.Add(block23);
             blocks.Add(block24);
+
+
         }
 
 
@@ -615,6 +619,20 @@ namespace ITEC145FinalProject
                     highScore = x;
                 }
             }
+        }
+
+        private void picInfo_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show("test message", "Aiden King", MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, "http://google.com", "keyword");
+            Form infoBox = new InfoBox(this);
+            infoBox.Show();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Form infoBox = new InfoBox(this);
+            infoBox.Show();
+            infoBox.BringToFront();
         }
     }
 }

@@ -35,8 +35,10 @@
             lblLevel = new Label();
             picGameArea = new PictureBox();
             picClose = new PictureBox();
+            picInfo = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)picGameArea).BeginInit();
             ((System.ComponentModel.ISupportInitialize)picClose).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)picInfo).BeginInit();
             SuspendLayout();
             // 
             // gameTimer
@@ -94,6 +96,17 @@
             picClose.TabStop = false;
             picClose.Click += picClose_Click;
             // 
+            // picInfo
+            // 
+            picInfo.BackColor = SystemColors.Control;
+            picInfo.Image = (Image)resources.GetObject("picInfo.Image");
+            picInfo.Location = new Point(0, 0);
+            picInfo.Name = "picInfo";
+            picInfo.Size = new Size(18, 18);
+            picInfo.TabIndex = 6;
+            picInfo.TabStop = false;
+            picInfo.Click += picInfo_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -102,6 +115,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Center;
             ClientSize = new Size(700, 780);
+            Controls.Add(picInfo);
             Controls.Add(picClose);
             Controls.Add(picGameArea);
             Controls.Add(lblLevel);
@@ -111,10 +125,12 @@
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Breakout King";
+            Load += Form1_Load;
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
             ((System.ComponentModel.ISupportInitialize)picGameArea).EndInit();
             ((System.ComponentModel.ISupportInitialize)picClose).EndInit();
+            ((System.ComponentModel.ISupportInitialize)picInfo).EndInit();
             ResumeLayout(false);
         }
 
@@ -125,5 +141,6 @@
         private Label lblLevel;
         public PictureBox picGameArea;
         private PictureBox picClose;
+        private PictureBox picInfo;
     }
 }
